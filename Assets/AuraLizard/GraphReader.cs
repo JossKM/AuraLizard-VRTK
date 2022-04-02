@@ -9,7 +9,7 @@ public class GraphReader
 {
 	static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
 	static string LINE_SPLIT_RE = @"\n";
-	static char[] TRIM_CHARS = { '\"' };
+	static char[] TRIM_CHARS = { '\"', '\r', '\n', '.', ' '};
 	public static Dictionary<string, List<string>> LoadAdjecencyList(string filePath)
 	{
 		Dictionary<string, List<string>> graph = null;
@@ -28,23 +28,26 @@ public class GraphReader
 
 		for (var lineIdx = 0; lineIdx < lines.Length; lineIdx++)
 		{
-			var values = Regex.Split(lines[lineIdx], SPLIT_RE);
-			if (values.Length == 0 || values[0] == "") continue;
+			string[] values = Regex.Split(lines[lineIdx], SPLIT_RE); // extract individual elements of a row
+
+			string sourceNode = values[0].Trim(TRIM_CHARS);
+
+			if (values.Length == 0 || sourceNode == "") continue;
 
 			List<string> edges = new List<string>();
 
 			for (int i = 1; i < values.Length; i++) // Add edges
 			{
-
-				if (values[i] == "")
+				var outEdge = values[i].Trim(TRIM_CHARS);
+				if (outEdge == "")
 				{
-					break;
+					continue;
 				}
 
-				edges.Add(values[i]);
+				edges.Add(outEdge);
 			}
 
-			graph[values[0]] = edges; // At source add list of connected edges
+			graph[sourceNode] = edges; // At source add list of connected edges
 
 		}
 		return graph;

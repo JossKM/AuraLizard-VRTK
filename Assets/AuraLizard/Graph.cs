@@ -65,4 +65,57 @@ public class Graph : MonoBehaviour
     public void UpdateEdges()
     {
     }
+
+    public void RunScaledPageRank(int kIterations, double scalingFactor, float iterationDelaySeconds)
+    {
+        StartCoroutine(ScaledPageRank(kIterations, scalingFactor, iterationDelaySeconds));
+    }
+
+   public IEnumerator ScaledPageRank(int kIterations, double scalingFactor, float iterationDelaySeconds)
+    {
+        const string PAGE_RANK = "PageRank";
+        const string PAGE_RANK_IN = "PageRankIn";
+        int N = nodes.Count;
+        double initialValue = 1.0 / N;
+        foreach (Node node in nodes) // Initialize values
+        {
+            node.data.Add(PAGE_RANK, initialValue);
+            node.data.Add(PAGE_RANK_IN, new double());
+        }
+
+        for(int i = 0; i < kIterations; i++) // PageRank update
+        {
+            foreach (Node node in nodes) // Initialize values
+            {
+                node.data[PAGE_RANK_IN] = 0.0;
+            }
+
+            foreach (Node node in nodes) //queue up next pageRank values
+            {
+                if(node.connections.Count == 0)
+                {
+                    node.data[PAGE_RANK_IN] = node.data[PAGE_RANK]; // If no edges give back to itself
+                } else
+                {
+                    foreach (Node outNode in node.connections)
+                    {
+                        double data = (double)node.data[PAGE_RANK];
+                        double newValue = ((double)outNode.data[PAGE_RANK_IN] + (data / node.connections.Count));
+                        outNode.data[PAGE_RANK_IN] = newValue; //to give away
+                    }
+                }
+            }
+
+            double scalingReturn = ((1.0 - scalingFactor) / N); //to give back to all nodes after scaling down
+            foreach (Node node in nodes) //assign new pageRank values
+            {
+                double dataIn = (double)node.data[PAGE_RANK_IN];
+                double newPageRank = (scalingFactor * dataIn) + scalingReturn;
+                node.data[PAGE_RANK] = newPageRank;
+                node.label.text = node.name + ": " + newPageRank.ToString("N3");
+            }
+
+            yield return new WaitForSeconds(iterationDelaySeconds);
+        }
+    }
 }
