@@ -39,17 +39,23 @@ public class NodeAudioResponse : MonoBehaviour
         baseScale = transform.localScale.x;
     }
 
-    public void Ping(float signal)
+    public void Stop()
     {
         if (pingCoroutine != null)
         {
             StopCoroutine(pingCoroutine);
         }
+        RevertToDefault();
+    }
+
+    public void Ping(float signal)
+    {
+        Stop();
         pingCoroutine = AudioResponseCoroutine(signal);
         StartCoroutine(pingCoroutine);
     }
 
-    public void RevertToDefault()
+    void RevertToDefault()
     {
         renderer.material.SetColor("_EmissionColor", Color.black);
         transform.localScale = new Vector3(baseScale, baseScale, baseScale);
@@ -74,7 +80,6 @@ public class NodeAudioResponse : MonoBehaviour
             yield return new WaitForEndOfFrame();
             sampleIdx = audio.timeSamples;
         }
-        RevertToDefault();
-        pingCoroutine = null;
+        Stop();
     }
 }

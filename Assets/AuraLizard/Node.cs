@@ -21,10 +21,11 @@ public class Node : MonoBehaviour
     static float signalPingThreshold = 0.0f;
 
     IEnumerator pingCoroutine = null;
+    IEnumerator audioPingCoroutine = null;
 
     public void Ping(float signal)
     {
-        audio.RevertToDefault();
+        audio.Stop();
         if (signal > signalPingThreshold)
         {
             if (pingCoroutine != null)
