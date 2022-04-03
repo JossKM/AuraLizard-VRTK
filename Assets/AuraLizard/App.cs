@@ -7,14 +7,52 @@ public class App : MonoBehaviour
 {
     public string fileToLoad;
     public Dictionary<string, List<string>> csvData;
-    public List<NodeBehavior> nodeBehaviors;
 
     public Graph graph;
-    // Start is called before the first frame update
-    void Start()
+
+    private Node selectedNode = null;
+
+    [SerializeField]
+    GameObject selectionSphere;
+    [SerializeField]
+    GameObject hoverSphere;
+
+    //[SerializeField]
+    //Color highlightColor;
+    //[SerializeField]
+    //Color selectColor;
+
+    public void SelectNode(Node node)
     {
-        if(graph)
+        if (node == null)
         {
+            selectedNode = null;
+            selectionSphere.SetActive(false);
+        }
+        else
+        {
+            selectedNode = node;
+            selectionSphere.SetActive(true);
+            selectionSphere.transform.position = selectedNode.gameObject.transform.position;
+            selectionSphere.transform.localScale = selectedNode.gameObject.GetComponentInChildren<Collider>().bounds.size * 1.25f;
+        }
+    }
+    public void HoverNode(Node node)
+    {
+        if(node == null)
+        {
+            hoverSphere.SetActive(false);
+        } else
+        {
+            hoverSphere.SetActive(true);
+            hoverSphere.transform.position = node.gameObject.transform.position;
+            hoverSphere.transform.localScale = node.gameObject.GetComponentInChildren<Collider>().bounds.size * 2.5f;
+        }
+    }
+
+    void LoadGraph()
+    {
+       
             csvData = GraphReader.LoadAdjecencyList(fileToLoad);
 
             foreach (KeyValuePair<string, List<string>> adjecencyEntry in csvData)
@@ -29,9 +67,20 @@ public class App : MonoBehaviour
 
                     graph.AddAndGetNode(nameOfDestinationNode, out Node destinationNode);
 
-                   sourceNode.connections.Add(destinationNode);
+                    sourceNode.connections.Add(destinationNode);
                 }
             }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+       // selectionSphere.GetComponent<Renderer>().material.SetColor("Tint", selectColor);
+       // hoverSphere.GetComponent<Renderer>().material.SetColor("Tint", highlightColor);
+        
+        if (graph)
+        {
+            LoadGraph();
         }
 
         graph.GenerateEdges();

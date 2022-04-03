@@ -20,8 +20,10 @@ public class Graph : MonoBehaviour
 
     [SerializeField]
     float edgeWidth = 0.1f;
+    [SerializeField]
+    float nodeScale = 0.1f;
 
-    //out param returns the Node with this name. If a Node was newly created then returns true
+    //will either get and return or just return a node by name. out param returns the Node with this name. If a Node was newly created then returns true
     public bool AddAndGetNode(string name, out Node outNode)
     {
         if (nodeNames.ContainsKey(name)) // if node does not exist...
@@ -38,6 +40,7 @@ public class Graph : MonoBehaviour
                (Random.value * (dimensions.z)) - dimensions.z * 0.5f
               );
         newNodeObject.transform.position = newPos;
+        newNodeObject.transform.localScale = new Vector3(nodeScale, nodeScale, nodeScale);
         outNode = newNodeObject.GetComponent<Node>();
         outNode.name = name;
         nodeNames[name] = outNode;
@@ -51,7 +54,7 @@ public class Graph : MonoBehaviour
         {
             foreach(Node destination in node.connections)
             {
-                GameObject newEdgeObject = Instantiate(edgePrefab, node.transform);
+                GameObject newEdgeObject = Instantiate(edgePrefab);
                 Vector3 toTarget = destination.transform.position - node.transform.position;
                 float distance = toTarget.magnitude;
                 newEdgeObject.transform.localScale = new Vector3(edgeWidth, edgeWidth, distance);
