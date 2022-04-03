@@ -7,6 +7,7 @@ public class Graph : MonoBehaviour
 {
     [SerializeField]
     public List<Node> nodes = new List<Node>();
+    public List<GameObject> edges = new List<GameObject>();
     public Dictionary<string, Node> nodeNames = new Dictionary<string, Node>();
 
     [SerializeField]
@@ -22,6 +23,11 @@ public class Graph : MonoBehaviour
     float edgeWidth = 0.1f;
     [SerializeField]
     float nodeScale = 0.1f;
+
+    //void PropogatePing()
+    //{
+
+    //}
 
     //will either get and return or just return a node by name. out param returns the Node with this name. If a Node was newly created then returns true
     public bool AddAndGetNode(string name, out Node outNode)
@@ -61,12 +67,19 @@ public class Graph : MonoBehaviour
                 newEdgeObject.transform.position = node.transform.position;
                 newEdgeObject.transform.rotation = Quaternion.LookRotation(toTarget, Vector3.up);
                 newEdgeObject.name = destination.name;
+                edges.Add(newEdgeObject);
             }
         }
     }
 
     public void UpdateEdges()
     {
+        foreach (var edge in edges)
+        {
+            Destroy(edge);
+        }
+
+        GenerateEdges();
     }
 
     public void RunScaledPageRank(int kIterations, double scalingFactor, float iterationDelaySeconds)

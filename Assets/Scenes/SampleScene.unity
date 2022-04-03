@@ -1769,17 +1769,17 @@ PrefabInstance:
     - target: {fileID: 5090692857797825975, guid: 35ec272822793b349a2ac9308a9c38bd,
         type: 3}
       propertyPath: dimensions.x
-      value: 12
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5090692857797825975, guid: 35ec272822793b349a2ac9308a9c38bd,
         type: 3}
       propertyPath: dimensions.y
-      value: 12
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5090692857797825975, guid: 35ec272822793b349a2ac9308a9c38bd,
         type: 3}
       propertyPath: dimensions.z
-      value: 12
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35ec272822793b349a2ac9308a9c38bd, type: 3}
@@ -1874,6 +1874,11 @@ PrefabInstance:
         type: 3}
       propertyPath: lookSpeedV
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5375803085336053283, guid: 1e9e17becb70fbb4bad4584d3d8f7412,
+        type: 3}
+      propertyPath: sprintMultiplier
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5375803085336053283, guid: 1e9e17becb70fbb4bad4584d3d8f7412,
         type: 3}

@@ -84,6 +84,6 @@ public class App : MonoBehaviour
         }
 
         graph.GenerateEdges();
-        graph.RunScaledPageRank(3000, 0.9, 0.01f);
+       // graph.RunScaledPageRank(3000, 0.9, 0.01f);
     }
 }

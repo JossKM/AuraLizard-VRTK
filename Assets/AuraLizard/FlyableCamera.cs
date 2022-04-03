@@ -20,7 +20,7 @@ public class FlyableCamera : MonoBehaviour
 
     private float yaw;
     private float pitch;
-    private float zoomBase;
+    private float mouseWheelLast = 0.0f;
 
     [SerializeField]
     Camera camera;
@@ -45,7 +45,8 @@ public class FlyableCamera : MonoBehaviour
         // z - forward  roll
         yaw = transform.eulerAngles.y;
         pitch = transform.eulerAngles.x;
-        zoomBase = -Mouse.current.scroll.y.ReadValue();
+        mouseWheelLast = Mouse.current.scroll.y.ReadValue();
+        transform.position = new Vector3(0, 0, 0);
     }
 
     private void FlyMovement()
@@ -102,8 +103,15 @@ public class FlyableCamera : MonoBehaviour
                         -Mouse.current.delta.y.ReadValue() * Time.deltaTime * moveSpeed, 0);
                 }
 
-                //Zoom in and out with Mouse Wheel
-                transform.Translate(0, 0, zoomBase + Mouse.current.scroll.y.ReadValue() * Time.deltaTime * zoomSpeed, Space.Self);
+
+                if(Mouse.current.scroll.IsActuated())
+                {
+                    //Zoom in and out with Mouse Wheel
+                    float mouseWheelNew = Mouse.current.scroll.y.ReadValue();
+                    float deltaWheel = mouseWheelNew - mouseWheelLast;
+                    transform.Translate(0, 0, deltaWheel * Time.deltaTime * zoomSpeed, Space.Self);
+                    mouseWheelLast = mouseWheelNew;
+                }
             }
         }
     }
@@ -129,6 +137,7 @@ public class FlyableCamera : MonoBehaviour
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 app.SelectNode(node);
+                node.Ping(1.0f);
             }
             else
             {
