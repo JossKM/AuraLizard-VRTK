@@ -5,7 +5,7 @@ Network Data Analysis final project about network data auralization. The project
 | Human | Serial Number |
 |---|---|
 | Joss | |
-| Mohamad | | 
+| Mohammed | 100850985 | 
 | Abe | 100467725 | 
 
 ## Introduction
