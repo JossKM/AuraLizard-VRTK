@@ -15,7 +15,7 @@ public class NodeAudioResponse : MonoBehaviour
     
     static float[] pingSamples = null;
     static int numSamples = 0;
-    static float pingScaleSample = 4f;
+    static float pingScaleSample = 2f;
     static float pingScaleBase = 2f;
 
     private float baseScale = 0.0f;

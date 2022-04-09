@@ -46,7 +46,6 @@ public class FlyableCamera : MonoBehaviour
         yaw = transform.eulerAngles.y;
         pitch = transform.eulerAngles.x;
         mouseWheelLast = Mouse.current.scroll.y.ReadValue();
-        transform.position = new Vector3(0, 0, 0);
     }
 
     private void FlyMovement()

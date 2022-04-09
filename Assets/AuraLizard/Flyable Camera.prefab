@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1398722286286636358}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.051, z: 0.28}
-  m_LocalScale: {x: 0.96833986, y: 0.4458455, z: 0.9757084}
+  m_LocalPosition: {x: 0, y: 0.051, z: 0.244}
+  m_LocalScale: {x: 0.96833986, y: 0.4458455, z: 0.8506714}
   m_Children: []
   m_Father: {fileID: 5375803085336053282}
   m_RootOrder: 1
@@ -107,7 +107,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5375803085336053287}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -179,10 +179,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df09fc9b7219c0c4aa292027dbd7f32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookSpeedH: 5
-  lookSpeedV: 5
-  zoomSpeed: 2
-  dragSpeed: 5
+  lookSpeedH: 15
+  lookSpeedV: 15
+  zoomSpeed: 1
+  moveSpeed: 5
+  sprintMultiplier: 10
+  camera: {fileID: 5375803085336053285}
+  app: {fileID: 0}
+  interactibleLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   b_shouldMove: 1
 --- !u!1 &6701746269997628357
 GameObject:
