@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class NodeAudioResponse : MonoBehaviour
 {
+    const float FREQ_MULTIPLIER_BASE = 1.059463094359f; // Twelfth root of two, part of equation to map frequencies of notes according to https://pages.mtu.edu/~suits/NoteFreqCalcs.html
+    const float PITCH_HALF_STEPS_PER_SIGNAL = 8.0f; // split signal into 
+
     [SerializeField]
     AudioSource audio;
+
+    [SerializeField]
+    AudioClip ping;
 
     [SerializeField]
     Color newCol;
@@ -15,10 +21,12 @@ public class NodeAudioResponse : MonoBehaviour
     
     static float[] pingSamples = null;
     static int numSamples = 0;
-    static float pingScaleSample = 2f;
-    static float pingScaleBase = 2f;
+    static float pingScaleSample = 1.0f;
+    static float pingScaleBase = 0.25f;
+   // static float pingSmoothing = 0.1f;
 
     private float baseScale = 0.0f;
+    private float currentScale = 1.0f;
 
     IEnumerator pingCoroutine = null;
 
@@ -44,42 +52,47 @@ public class NodeAudioResponse : MonoBehaviour
         if (pingCoroutine != null)
         {
             StopCoroutine(pingCoroutine);
+            pingCoroutine = null;
         }
         RevertToDefault();
     }
 
-    public void Ping(float signal)
+    public void Ping(float signal, float delay)
     {
-        Stop();
-        pingCoroutine = AudioResponseCoroutine(signal);
+        audio.clip = ping;
+        pingCoroutine = AudioResponseCoroutine(signal, delay);
         StartCoroutine(pingCoroutine);
     }
 
     void RevertToDefault()
     {
         renderer.material.SetColor("_EmissionColor", Color.black);
-        transform.localScale = new Vector3(baseScale, baseScale, baseScale);
+        currentScale = baseScale;
+        transform.localScale = new Vector3(currentScale, currentScale, currentScale);
     }
 
-    private IEnumerator AudioResponseCoroutine(float signal)
+    private IEnumerator AudioResponseCoroutine(float signal, float delay)
     {
+        yield return new WaitForSeconds(delay);
         audio.Stop();
         audio.volume = signal;
-        audio.pitch = 1.0f + (-0.5f * signal);
+        float frequencyMultiplier = Random.Range(0.995f, 1.005f) * Mathf.Pow(FREQ_MULTIPLIER_BASE, ((PITCH_HALF_STEPS_PER_SIGNAL) * (1.0f - signal)) - PITCH_HALF_STEPS_PER_SIGNAL);
+        audio.pitch = frequencyMultiplier;
+
         audio.Play();
         int sampleIdx = 0;
-        while (sampleIdx < numSamples)
+        while (audio.isPlaying)
         {
             float sample = pingSamples[sampleIdx];
-            float progress = (float)sampleIdx / (float)numSamples;
+            float progress = Mathf.Min((float)sampleIdx / (float)numSamples, 1.0f);
             float scale = (1.0f - progress) * signal;
+
             Color newCol = Color.white * scale;
             renderer.material.SetColor("_EmissionColor", newCol);
-            float currentScale = 0.01f + baseScale + (baseScale * pingScaleSample * sample) + (pingScaleBase * scale);
+            currentScale = 0.01f + baseScale + (baseScale * pingScaleSample * sample) + (pingScaleBase * scale); //Mathf.Lerp(0.01f + baseScale + (baseScale * pingScaleSample * sample) + (pingScaleBase * scale), currentScale, pingSmoothing);
             transform.localScale = new Vector3(currentScale, currentScale, currentScale);
             yield return new WaitForEndOfFrame();
             sampleIdx = audio.timeSamples;
         }
-        Stop();
     }
 }

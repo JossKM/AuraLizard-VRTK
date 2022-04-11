@@ -1,13 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+//Find Node from edge X
+//Find out Edge from node
+//Find in Edge from node
+//Find all Nodes connected to node
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "Node", menuName = "AuraLizard/Node")]
 public class Node : MonoBehaviour
 {
     [SerializeField]
-    public List<Node> connections = new List<Node>();
+    //public List<Tuple<Edge, Node>> connections = new List<Node>();
+    //public List<Edge> edges = new List<Edge>();
+    public HashSet<Edge> outEdges = new HashSet<Edge>();
+    public HashSet<Edge> inEdges = new HashSet<Edge>();
+
     [SerializeField]
     public Dictionary<string, object> data = new Dictionary<string, object>();
     [SerializeField]
@@ -16,37 +25,55 @@ public class Node : MonoBehaviour
     [SerializeField]
     public NodeAudioResponse audio;
 
-    static float pingDelay = 0.5f;
-    static float signalLoss = 0.2f;
-    static float signalPingThreshold = 0.0f;
-
+    static float PING_DELAY = 0.25f;
+    static float SIGNAL_RANGE = 8.0f;
+    static float SIGNAL_LOSS = 1.0f/SIGNAL_RANGE;
+    static float SIGNAL_PING_THRESH = 0.0f;
     IEnumerator pingCoroutine = null;
-    IEnumerator audioPingCoroutine = null;
 
-    public void Ping(float signal)
+    private Collider collider;
+
+    public UnityEvent eventOnPositionChanged;
+
+    public Vector3 GetDimensions()
     {
-        audio.Stop();
-        if (signal > signalPingThreshold)
+        return collider.bounds.size;
+    }
+    public float GetRadius()
+    {
+        Vector3 dimensions = GetDimensions();
+        float maxRadius = Mathf.Max(dimensions.x, Mathf.Max(dimensions.y, dimensions.z));
+        return maxRadius;
+    }
+
+    private void Awake()
+    {
+        collider = GetComponentInChildren<Collider>();
+        eventOnPositionChanged.AddListener(OnPositionChangedListener);
+    }
+
+    public void Ping(float signal, float delay)
+    {
+        if (signal > SIGNAL_PING_THRESH)
         {
-            if (pingCoroutine != null)
+            audio.Ping(signal, delay);
+            foreach (Edge connection in outEdges)
             {
-                StopCoroutine(pingCoroutine);
+                connection.destination.Ping(signal - SIGNAL_LOSS, delay + PING_DELAY);
             }
-            pingCoroutine = PingCoroutine(signal);
-            StartCoroutine(pingCoroutine);
         }
     }
 
-    private IEnumerator PingCoroutine(float signal)
+    private void OnPositionChangedListener()
     {
-        audio.Ping(signal);
-
-        yield return new WaitForSeconds(pingDelay);
-        foreach(Node connection in connections)
+        foreach(Edge edge in outEdges)
         {
-            connection.Ping(signal - signalLoss);
-            yield return new WaitForSeconds(0.1f);
+            edge.UpdateVisual();
         }
-        pingCoroutine = null;
+
+        foreach (Edge edge in inEdges)
+        {
+            edge.UpdateVisual();
+        }
     }
 }

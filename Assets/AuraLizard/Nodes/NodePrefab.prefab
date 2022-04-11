@@ -24,7 +24,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838217213842474400}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -14.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -50,7 +50,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34504279ea63ef249b155f6a41684854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connections: []
   label: {fileID: 1377170887580734745}
   audio: {fileID: 4970783720963609702}
 --- !u!1 &1768870896718552504
@@ -443,4 +442,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audio: {fileID: 42924770598079702}
+  ping: {fileID: 8300000, guid: 00c9b5d24ad154d4fb39859d295a974a, type: 3}
+  newCol: {r: 0, g: 0, b: 0, a: 0}
   renderer: {fileID: 7224171075863892832}

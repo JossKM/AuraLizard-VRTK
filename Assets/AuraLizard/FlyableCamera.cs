@@ -77,13 +77,14 @@ public class FlyableCamera : MonoBehaviour
                 //Look around with Mouse
                 if (Mouse.current.rightButton.isPressed)
                 {
-                    yaw += lookSpeedH * Time.deltaTime * Mouse.current.delta.x.ReadValue();
-                    pitch -= lookSpeedV * Time.deltaTime * Mouse.current.delta.y.ReadValue();
+                    yaw   += camera.fieldOfView * lookSpeedH * Time.deltaTime * Mouse.current.delta.x.ReadValue();
+                    pitch -= camera.fieldOfView * lookSpeedV * Time.deltaTime * Mouse.current.delta.y.ReadValue();
+                    pitch = Mathf.Clamp(pitch, -89.9f, 89.9f);
 
                     transform.eulerAngles = new Vector3(pitch, yaw, 0f);
 
                     Vector3 offset = Vector3.zero;
-                    float offsetDelta = Time.deltaTime * moveSpeed;
+                    float offsetDelta = Time.deltaTime * moveSpeed * camera.fieldOfView;
                     if (Keyboard.current.leftShiftKey.isPressed) offsetDelta *= sprintMultiplier;
                     if (Keyboard.current.sKey.isPressed) offset.z -= offsetDelta;
                     if (Keyboard.current.wKey.isPressed) offset.z += offsetDelta;
@@ -105,11 +106,13 @@ public class FlyableCamera : MonoBehaviour
 
                 if(Mouse.current.scroll.IsActuated())
                 {
-                    //Zoom in and out with Mouse Wheel
                     float mouseWheelNew = Mouse.current.scroll.y.ReadValue();
                     float deltaWheel = mouseWheelNew - mouseWheelLast;
-                    transform.Translate(0, 0, deltaWheel * Time.deltaTime * zoomSpeed, Space.Self);
-                    mouseWheelLast = mouseWheelNew;
+                    camera.fieldOfView = Mathf.Clamp(camera.fieldOfView - (deltaWheel * Time.deltaTime * zoomSpeed), 5.0f, 120.0f);
+
+                    //Zoom in and out with Mouse Wheel
+                    //transform.Translate(0, 0, deltaWheel * Time.deltaTime * zoomSpeed, Space.Self);
+                    //mouseWheelLast = mouseWheelNew;
                 }
             }
         }
@@ -136,15 +139,29 @@ public class FlyableCamera : MonoBehaviour
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 app.SelectNode(node);
-                node.Ping(1.0f);
+                node.Ping(1.0f, 0.0f);
             }
-            else
+            else if (Mouse.current.leftButton.isPressed) // Drag
+            {
+                node.transform.Translate(Mouse.current.delta.x.ReadValue() * moveSpeed * Time.deltaTime,
+                        Mouse.current.delta.y.ReadValue() * moveSpeed * Time.deltaTime, 0, camera.transform);
+                
+                node.eventOnPositionChanged.Invoke();
+            } else
             {
                 app.HoverNode(node);
             }
-        } else
+
+
+        } else // Not over a node
         {
-            app.HoverNode(null);
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                app.SelectNode(null);
+            } else
+            {
+                app.HoverNode(null);
+            }
         }
     }
 
