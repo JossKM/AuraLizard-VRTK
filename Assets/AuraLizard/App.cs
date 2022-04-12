@@ -4,6 +4,8 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using System;
+
 public class App : MonoBehaviour
 {
     public string timeSeriesFilenameBaseToLoad;
@@ -26,12 +28,16 @@ public class App : MonoBehaviour
     [Header("Time series graph")]
     [SerializeField]
     List<Dictionary<string, List<string>>> adjecencyDataTimeSeries = new List<Dictionary<string, List<string>>>();
+
     [SerializeField]
     float animTimeIntervalBetweenGraphs = 0.0f;
     //[SerializeField]
     //float animTime = 0.0f;
     [SerializeField]
     int animTimeIndex = 0;
+
+    [SerializeField]
+    List<QueuableCommand> editQueue;
 
     //Equivalent to calling SelectNode(null)
     public void DeselectNode()
@@ -78,17 +84,46 @@ public class App : MonoBehaviour
 
     void LoadGraphTimeSeries(string filenameBase, int start, int end)
     {
-        for(int i = start; i <= end; i++)
+        adjecencyDataTimeSeries.Clear();
+        for (int i = start; i <= end; i++)
         {
             AppendGraphTimeSeries((filenameBase + i.ToString()));
         }
     }
 
-    void AppendGraphTimeSeries(string fileName)
+    void LoadGraph(string filePath)
+    {
+        adjecencyDataTimeSeries.Clear();
+        Dictionary<string, List<string>> csvData;
+        csvData = GraphReader.LoadAdjecencyList(filePath);
+        SetGraphFromAdjecencyList(csvData);
+
+    }
+
+    void AppendGraphTimeSeries(string filePath)
     {
         Dictionary<string, List<string>> csvData;
-        csvData = GraphReader.LoadAdjecencyList(fileName);
+        csvData = GraphReader.LoadAdjecencyList(filePath);
         adjecencyDataTimeSeries.Add(csvData);
+    }
+
+    void UpdateGraphEdgesFromAdjecencyList(Dictionary<string, List<string>> adjecencyList)
+    {
+        graph.RemoveAllEdges();
+        foreach (KeyValuePair<string, List<string>> adjecencyEntry in adjecencyList)
+        {
+            string nameOfSourceNode = adjecencyEntry.Key;
+
+            graph.AddAndGetNode(nameOfSourceNode, out Node sourceNode);
+
+            for (int edgeIndex = 0; edgeIndex < adjecencyEntry.Value.Count; edgeIndex++)
+            {
+                string nameOfDestinationNode = adjecencyEntry.Value[edgeIndex];
+
+                graph.AddAndGetNode(nameOfDestinationNode, out Node destinationNode);
+                graph.AddEdge(sourceNode, destinationNode);
+            }
+        }
     }
 
     void SetGraphFromAdjecencyList(Dictionary<string, List<string>> adjecencyList)
@@ -116,16 +151,8 @@ public class App : MonoBehaviour
     {
         eventToggleEditMode.AddListener(ToggleEditModeListener);
         eventPageRank.AddListener(RunPageRankListener);
-
-        if (graph)
-        {
-            LoadGraphTimeSeries(timeSeriesFilenameBaseToLoad, 1, numFramesInSeries);
-            //AppendGraphTimeSeries(fileToLoad);
-            SetGraphFromAdjecencyList(adjecencyDataTimeSeries[animTimeIndex]);
-        }
-
-        // graph.RunScaledPageRank(3000, 0.9, 0.01f);
     }
+
     public void Update()
     {
         if(Keyboard.current.rKey.wasPressedThisFrame)
@@ -138,12 +165,58 @@ public class App : MonoBehaviour
             ToggleEditMode(!isEditModeOn);
         }
 
+        if (Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            OpenGraphSelectMenu();
+        }
+
         if (Keyboard.current.pKey.wasPressedThisFrame)
         {
-            StartCoroutine(AnimateTimeSeriesOnce(animTimeIntervalBetweenGraphs));
+            PlayAnim();
         }
     }
 
+    public void OpenGraphSelectMenu()
+    {
+        OpenFileName ofn = new OpenFileName();
+        ofn.defExt = ".csv";
+        if (!OpenFileDialog.OpenFile(ofn))
+        {
+            return;
+        }
+        Debug.Log("Opening: " + ofn.file);
+
+        try
+        {
+            LoadGraph(ofn.file);
+        }
+          catch (Exception e)
+        {
+          //  Debug.LogError("Failed to open file: " + ofn.file + " -- " + e.Message);
+
+            try
+            {
+                adjecencyDataTimeSeries.Clear();
+                string[] files = Directory.GetFiles(ofn.file);
+                foreach (string file in files)
+                {
+                    try
+                    {
+                        AppendGraphTimeSeries(file);
+                    }
+                    catch (Exception lol)
+                    {
+
+                    }
+                }
+                SetGraphFromAdjecencyList(adjecencyDataTimeSeries[0]);
+            }
+            catch (Exception ef)
+            {
+                Debug.LogError("Failed to open file: " + ofn.file + " -- " + ef.Message);
+            }
+        }
+    }
     public void ToggleEditMode(bool on)
     {
         eventToggleEditMode.Invoke(on);
@@ -159,13 +232,22 @@ public class App : MonoBehaviour
         graph.RunScaledPageRank(3000, 0.9, 0.01f);
     }
 
+    public void PlayAnim()
+    {
+        if(adjecencyDataTimeSeries.Count > 0)
+        {
+            StartCoroutine(AnimateTimeSeriesOnce(animTimeIntervalBetweenGraphs));
+        }
+    }
+
     IEnumerator AnimateTimeSeriesOnce(float timeDelay)
     {
-        for(animTimeIndex = 0; animTimeIndex < adjecencyDataTimeSeries.Count; animTimeIndex++)
+        SetGraphFromAdjecencyList(adjecencyDataTimeSeries[0]);
+
+        for (animTimeIndex = 0; animTimeIndex < adjecencyDataTimeSeries.Count; animTimeIndex++)
         {
-            SetGraphFromAdjecencyList(adjecencyDataTimeSeries[animTimeIndex]);
+            UpdateGraphEdgesFromAdjecencyList(adjecencyDataTimeSeries[animTimeIndex]);
             yield return new WaitForSeconds(timeDelay);
         }
-       // animTimeIndex = (animTimeIndex + 1) % adjecencyDataTimeSeries.Count;
     }
 }

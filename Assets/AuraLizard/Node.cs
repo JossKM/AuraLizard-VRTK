@@ -12,13 +12,15 @@ using UnityEngine.Events;
 public class Node : MonoBehaviour
 {
     [SerializeField]
-    //public List<Tuple<Edge, Node>> connections = new List<Node>();
-    //public List<Edge> edges = new List<Edge>();
     public HashSet<Edge> outEdges = new HashSet<Edge>();
     public HashSet<Edge> inEdges = new HashSet<Edge>();
 
     [SerializeField]
     public Dictionary<string, object> data = new Dictionary<string, object>();
+ 
+
+    [Header("Game stuff")]
+
     [SerializeField]
     public TMPro.TextMeshPro label;
 
@@ -26,9 +28,9 @@ public class Node : MonoBehaviour
     public NodeAudioResponse audio;
 
     static float PING_DELAY = 0.25f;
-    static float SIGNAL_RANGE = 8.0f;
+    static float SIGNAL_RANGE = 4.0f;
     static float SIGNAL_LOSS = 1.0f/SIGNAL_RANGE;
-    static float SIGNAL_PING_THRESH = 0.0f;
+    static float SIGNAL_PING_THRESH = 0.01f;
     IEnumerator pingCoroutine = null;
 
     private Collider collider;

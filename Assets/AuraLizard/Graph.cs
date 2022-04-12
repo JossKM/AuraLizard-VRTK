@@ -9,7 +9,7 @@ public class Graph : MonoBehaviour
     [SerializeField]
     public List<Node> nodes = new List<Node>();
     public HashSet<Edge> edges = new HashSet<Edge>();
-    public Dictionary<string, Node> nodeNames = new Dictionary<string, Node>();
+    private Dictionary<string, Node> nodeNames = new Dictionary<string, Node>();
 
     [SerializeField]
     GameObject edgePrefab;
@@ -55,6 +55,15 @@ public class Graph : MonoBehaviour
         return true;
     }
 
+    public void AddEdge(string source, string destination, float weight = 1.0f)
+    {
+        AddEdge(nodeNames[source], nodeNames[destination]);
+    }
+    public void RemoveEdge(string source, string destination)
+    {
+        RemoveEdge(nodeNames[source], nodeNames[destination]);
+    }
+
     //Will add edge to node and to the Graph
     public void AddEdge(Node source, Node destination, float weight = 1.0f)
     {
@@ -72,29 +81,26 @@ public class Graph : MonoBehaviour
     
         edgeComponent.UpdateVisual(edgeWidth);
         eventOnEdgeCreation.Invoke(edgeComponent);
-//#if DEBUG
-//        if(source.connections.Contains(edgeComponent))
-//        {
-//            Debug.LogError("Note: There was already an edge between: " + source.name + " and " + destination.name);
-//        }
-//#endif
     }
 
-    //public void RemoveEdge(Node source, Node destination, bool bothWays = false)
-    //{
-    //    HashSet<Edge> toRemove = source.outEdges;
-    //    toRemove.IntersectWith(destination.inEdges);
+    public void RemoveEdge(Node source, Node destination, bool bothWays = false)
+    {
+        //HashSet<Edge> toRemove = source.outEdges;
+        //toRemove.IntersectWith(destination.inEdges);
 
-    //    foreach (Edge edge in toRemove)
-    //    {
-    //        RemoveEdge(edge);
-    //    }
+        foreach (Edge edge in source.outEdges)
+        {
+            if(destination.inEdges.Contains(edge))
+            {
+                RemoveEdge(edge);
+            }
+        }
 
-    //    if (bothWays)
-    //    {
-    //        RemoveEdge(destination, source, false);
-    //    }
-    //}
+        if (bothWays)
+        {
+            RemoveEdge(destination, source, false);
+        }
+    }
 
     public void RemoveEdge(Edge edge)
     {

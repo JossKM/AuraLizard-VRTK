@@ -10,18 +10,20 @@ public class GraphReader
 	static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
 	static string LINE_SPLIT_RE = @"\n";
 	static char[] TRIM_CHARS = { '\"', '\r', '\n', '.', ' '};
+	
 	public static Dictionary<string, List<string>> LoadAdjecencyList(string filePath)
 	{
 		Dictionary<string, List<string>> graph = null;
+		string dataText = System.IO.File.ReadAllText(filePath);
 
-		TextAsset data = Resources.Load(filePath) as TextAsset;
+		//TextAsset data = Resources.Load(filePath) as TextAsset;
 
-		if (data == null)
-		{
-			throw new Exception("CSVReader: File failed to open: " + filePath);
-		}
+		//if (data == null)
+		//{
+		//	throw new Exception("CSVReader: File failed to open: " + filePath);
+		//}
 
-		var lines = Regex.Split(data.text, LINE_SPLIT_RE);
+		var lines = Regex.Split(dataText, LINE_SPLIT_RE);
 		if (lines.Length <= 1) return graph;
 
 		graph = new Dictionary<string, List<string>>();

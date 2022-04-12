@@ -99,8 +99,8 @@ public class FlyableCamera : MonoBehaviour
                 //drag camera around with Middle Mouse
                 if (Mouse.current.middleButton.isPressed)
                 {
-                    transform.Translate(-Mouse.current.delta.x.ReadValue() * Time.deltaTime * moveSpeed,
-                        -Mouse.current.delta.y.ReadValue() * Time.deltaTime * moveSpeed, 0);
+                    transform.Translate(-Mouse.current.delta.x.ReadValue() * Time.deltaTime * moveSpeed * camera.fieldOfView,
+                        -Mouse.current.delta.y.ReadValue() * Time.deltaTime * moveSpeed * camera.fieldOfView, 0);
                 }
 
 
