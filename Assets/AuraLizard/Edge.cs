@@ -32,6 +32,13 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
 
     public void UpdateVisual(float width)
     {
+        if(source == destination)
+        {
+            Debug.Log("Self loops are not yet supported");
+            transform.localScale = Vector3.zero;
+            return;
+        }
+
         Vector3 toTarget = destination.transform.position - source.transform.position;
         float distance = toTarget.magnitude; //- destination.GetRadius() - source.GetRadius();
         transform.localScale = new Vector3(width, width, distance);

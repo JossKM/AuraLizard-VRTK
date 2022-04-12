@@ -27,6 +27,7 @@ public class Graph : MonoBehaviour
 
     [SerializeField]
     public UnityEvent<Edge> eventOnEdgeCreation;
+    
 
     //will either get and return or just return a node by name. out param returns the Node with this name. If a Node was newly created then returns true
     public bool AddAndGetNode(string name, out Node outNode)
@@ -79,24 +80,21 @@ public class Graph : MonoBehaviour
 //#endif
     }
 
-    public void RemoveEdge(Node source, Node destination, bool bothWays = false)
-    {
-        HashSet<Edge> toRemove = source.outEdges;
-        toRemove.IntersectWith(destination.inEdges);
+    //public void RemoveEdge(Node source, Node destination, bool bothWays = false)
+    //{
+    //    HashSet<Edge> toRemove = source.outEdges;
+    //    toRemove.IntersectWith(destination.inEdges);
 
-        //foreach (Edge edge in source.outEdges)
-        //{
-        //    if(edge.destination == destination)
-        //    {
-        //        RemoveEdge(edge);
-        //    }
-        //}
+    //    foreach (Edge edge in toRemove)
+    //    {
+    //        RemoveEdge(edge);
+    //    }
 
-        if (bothWays)
-        {
-            RemoveEdge(destination, source, false);
-        }
-    }
+    //    if (bothWays)
+    //    {
+    //        RemoveEdge(destination, source, false);
+    //    }
+    //}
 
     public void RemoveEdge(Edge edge)
     {
@@ -115,6 +113,58 @@ public class Graph : MonoBehaviour
         }
         edges.Clear();
     }
+
+    public void RemoveInEdgesFromNode(Node node)
+    {
+        foreach (Edge edge in node.inEdges)
+        {
+            edge.source.outEdges.Clear();
+            Destroy(edge.gameObject);
+        }
+
+        node.inEdges.Clear();
+    }
+
+    public void RemoveOutEdgesFromNode(Node node)
+    {
+        foreach (Edge edge in node.outEdges)
+        {
+            edge.destination.inEdges.Clear();
+            Destroy(edge.gameObject);
+        }
+        node.outEdges.Clear();
+    }
+
+    public void RemoveEdgesFromNode(Node node)
+    {
+
+        RemoveInEdgesFromNode(node);
+        RemoveOutEdgesFromNode(node);
+    }
+
+    public void RemoveNode(Node node)
+    {
+        RemoveEdgesFromNode(node);
+        Destroy(node.gameObject);
+        nodes.Remove(node);
+        nodeNames.Remove(node.name);
+    }
+
+    public void Clear()
+    {
+        foreach (Node node in nodes)
+        {
+            Destroy(node.gameObject);
+        }
+        foreach(Edge edge in edges)
+        {
+            Destroy(edge.gameObject);
+        }
+        nodes.Clear();
+        edges.Clear();
+        nodeNames.Clear();
+    }
+
     public void RandomizeEdges(float probability = 0.3f)
     {
         RemoveAllEdges();

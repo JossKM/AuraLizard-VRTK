@@ -2473,7 +2473,7 @@ PrefabInstance:
     - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
         type: 3}
       propertyPath: fileToLoad
-      value: A2-4-f
+      value: labelled-studentSocialData-processed-q3
       objectReference: {fileID: 0}
     - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
         type: 3}
@@ -2500,6 +2500,11 @@ PrefabInstance:
         type: 3}
       propertyPath: dimensions.z
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
+        type: 3}
+      propertyPath: animTimeIndex
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
         type: 3}
@@ -2545,6 +2550,21 @@ PrefabInstance:
         type: 3}
       propertyPath: highlightColor.r
       value: 0.63559985
+      objectReference: {fileID: 0}
+    - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
+        type: 3}
+      propertyPath: numFramesInSeries
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
+        type: 3}
+      propertyPath: timeSeriesFilenameBaseToLoad
+      value: 'A2-4-f '
+      objectReference: {fileID: 0}
+    - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
+        type: 3}
+      propertyPath: animTimeIntervalBetweenGraphs
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
         type: 3}
