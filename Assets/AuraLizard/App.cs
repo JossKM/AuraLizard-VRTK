@@ -95,7 +95,7 @@ public class App : MonoBehaviour
     {
         adjecencyDataTimeSeries.Clear();
         Dictionary<string, List<string>> csvData;
-        csvData = GraphReader.LoadAdjecencyList(filePath);
+        csvData = GraphReader.LoadAdjecencyList(filePath, true);
         SetGraphFromAdjecencyList(csvData);
 
     }
@@ -103,7 +103,7 @@ public class App : MonoBehaviour
     void AppendGraphTimeSeries(string filePath)
     {
         Dictionary<string, List<string>> csvData;
-        csvData = GraphReader.LoadAdjecencyList(filePath);
+        csvData = GraphReader.LoadAdjecencyList(filePath, true);
         adjecencyDataTimeSeries.Add(csvData);
     }
 
@@ -174,6 +174,46 @@ public class App : MonoBehaviour
         {
             PlayAnim();
         }
+
+        if (Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            LoadExampleData();
+        }
+    }
+
+    public void LoadExampleData(string basename = "example/day_", int beginIndex = 1, int endIndex = 30)
+    {
+        for (int i = beginIndex; i <= endIndex; i++)
+        {
+            try
+            {
+                string file = basename + i.ToString();
+                Dictionary<string, List<string>> csvData;
+                csvData = GraphReader.LoadAdjecencyList(file, false);
+                adjecencyDataTimeSeries.Add(csvData);
+            }
+            catch (Exception lol)
+            {
+            }
+        }
+        SetGraphFromAdjecencyList(adjecencyDataTimeSeries[0]);
+    }
+
+    private void LoadAllFilesInFolder(string folderPath, bool isExternal)
+    {
+        string[] files = Directory.GetFiles(folderPath);
+        adjecencyDataTimeSeries.Clear();
+        foreach (string file in files)
+        {
+            try
+            {
+                AppendGraphTimeSeries(file);
+            }
+            catch (Exception lol)
+            {
+            }
+        }
+        SetGraphFromAdjecencyList(adjecencyDataTimeSeries[0]);
     }
 
     public void OpenGraphSelectMenu()
@@ -196,20 +236,7 @@ public class App : MonoBehaviour
 
             try
             {
-                adjecencyDataTimeSeries.Clear();
-                string[] files = Directory.GetFiles(ofn.file);
-                foreach (string file in files)
-                {
-                    try
-                    {
-                        AppendGraphTimeSeries(file);
-                    }
-                    catch (Exception lol)
-                    {
-
-                    }
-                }
-                SetGraphFromAdjecencyList(adjecencyDataTimeSeries[0]);
+                LoadAllFilesInFolder(ofn.file, true);
             }
             catch (Exception ef)
             {

@@ -1,0 +1,88 @@
+Source,Target,Type,Id,Label,timeset,Weight
+Danish,Francel,Undirected,900,,,1
+Danish,Satya Sannihith Lingutla,Undirected,901,,,1
+Danish,Bhavik Naik,Undirected,902,,,1
+Danish,RIshivarun Goud Sukka,Undirected,903,,,1
+Danish,Temitayo Hayes,Undirected,904,,,1
+Drumil,Ali Raamish,Undirected,905,,,1
+Drumil,Devika Padam,Undirected,906,,,1
+Drumil,Pallavi Nayak,Undirected,907,,,1
+Drumil,Sage M.,Undirected,908,,,1
+Shahrbanoo Zomorodzadeh,Negin Tabaraki,Undirected,909,,,1
+Israt Jahan Jui,Marzieh Ahmadi,Undirected,910,,,1
+Israt Jahan Jui,Paul Louis,Undirected,911,,,1
+Gowtham Koppada,Alekhya Tanniru,Undirected,912,,,1
+Francel,Devika Padam,Undirected,914,,,1
+Shailee,Francel,Undirected,915,,,1
+Shailee,Ayush Vyas,Undirected,916,,,1
+Shailee,Gowtham Koppada,Undirected,917,,,1
+Ali Raamish,Devika Padam,Undirected,918,,,1
+Ali Raamish,Pallavi Nayak,Undirected,919,,,1
+Felipe Megale,Marzieh Ahmadi,Undirected,920,,,1
+Felipe Megale,Zixin Zhao,Undirected,921,,,1
+Dishaben Vitthani,Gorasiya Jahnvi,Undirected,922,,,1
+Shweta Jacob,Paul Louis,Undirected,923,,,1
+Satya Sannihith Lingutla,Prajwal,Undirected,925,,,1
+Satya Sannihith Lingutla,Haritha,Undirected,926,,,1
+Satya Sannihith Lingutla,Sai Hemanth Bheemineni,Undirected,927,,,1
+Satya Sannihith Lingutla,RIshivarun Goud Sukka,Undirected,928,,,1
+Sanjana Shashibhushan,Nikhil Gupta,Undirected,929,,,1
+Sanjana Shashibhushan,Anant Nayak,Undirected,930,,,1
+Sanjana Shashibhushan,Pooja Pucha,Undirected,931,,,1
+Sanjana Shashibhushan,Danish,Undirected,932,,,1
+Sanjana Shashibhushan,Manoj Chunduru,Undirected,933,,,1
+Sanjana Shashibhushan,Tanya Mary Udmala,Undirected,934,,,1
+Sanjana Shashibhushan,Ashika Mattu,Undirected,936,,,1
+Meher Viswanath,Alekhya Tanniru,Undirected,937,,,1
+Abe,Sri Nikitha Varada,Undirected,938,,,1
+Abe,Felipe Megale,Undirected,939,,,1
+Abe,Ali Raamish,Undirected,940,,,1
+Abe,Haritha,Undirected,941,,,1
+Haritha,Sharmila,Undirected,943,,,1
+Haritha,RIshivarun Goud Sukka,Undirected,944,,,1
+Sharmila,Sri Nikitha Varada,Undirected,945,,,1
+Sharmila,RIshivarun Goud Sukka,Undirected,946,,,1
+Sharmila,Tanya Mary Udmala,Undirected,947,,,1
+Sharmila,Pooja Pucha,Undirected,948,,,1
+Sai Hemanth Bheemineni,RIshivarun Goud Sukka,Undirected,950,,,1
+Devika Padam,Ayush Vyas,Undirected,951,,,1
+Devika Padam,Shailee,Undirected,953,,,1
+RIshivarun Goud Sukka,Sri Nikitha Varada,Undirected,957,,,1
+Manoj Chunduru,Raj Kumar,Undirected,961,,,1
+Manoj Chunduru,Devika Padam,Undirected,962,,,1
+Manoj Chunduru,Nikhil Gupta,Undirected,963,,,1
+Manoj Chunduru,Tanya Mary Udmala,Undirected,964,,,1
+Manoj Chunduru,Pooja Pucha,Undirected,965,,,1
+Manoj Chunduru,Ashika Mattu,Undirected,966,,,1
+Manoj Chunduru,Kalyan Reddy Pedalanka,Undirected,967,,,1
+Raj Kumar,Sanjana Shashibhushan,Undirected,968,,,1
+Raj Kumar,Abe,Undirected,969,,,1
+Raj Kumar,Nikhil Gupta,Undirected,971,,,1
+Raj Kumar,Anant Nayak,Undirected,972,,,1
+Raj Kumar,Pallavi Nayak,Undirected,973,,,1
+Mohammad Khalkhali Zavieh,Negin Tabaraki,Undirected,974,,,1
+Nikhil Gupta,RIshivarun Goud Sukka,Undirected,975,,,1
+Nikhil Gupta,Satya Sannihith Lingutla,Undirected,976,,,1
+Nikhil Gupta,Pooja Pucha,Undirected,977,,,1
+Nikhil Gupta,Tanya Mary Udmala,Undirected,979,,,1
+Anant Nayak,Shailee,Undirected,980,,,1
+Anant Nayak,Sai Hemanth Bheemineni,Undirected,981,,,1
+Anant Nayak,Prajwal,Undirected,982,,,1
+Temitayo Hayes,Francel,Undirected,983,,,1
+Temitayo Hayes,Abe,Undirected,984,,,1
+Parisa Sargolzaei,Mohammed Abid,Undirected,985,,,1
+Parisa Sargolzaei,Israt Jahan Jui,Undirected,986,,,1
+Parisa Sargolzaei,Felipe Megale,Undirected,987,,,1
+Parisa Sargolzaei,Marzieh Ahmadi,Undirected,988,,,1
+Parisa Sargolzaei,Negin Tabaraki,Undirected,989,,,1
+Parisa Sargolzaei,Sage M.,Undirected,990,,,1
+Tanya Mary Udmala,Haritha,Undirected,991,,,1
+Tanya Mary Udmala,Sri Nikitha Varada,Undirected,992,,,1
+Tanya Mary Udmala,Pooja Pucha,Undirected,993,,,1
+Tanya Mary Udmala,Kalyan Reddy Pedalanka,Undirected,997,,,1
+Pooja Pucha,Haritha,Undirected,999,,,1
+Pooja Pucha,Kalyan Reddy Pedalanka,Undirected,1004,,,1
+Kalyan Reddy Pedalanka,Satya Sannihith Lingutla,Undirected,1005,,,1
+Kalyan Reddy Pedalanka,Sharmila,Undirected,1006,,,1
+Sage M.,Devika Padam,Undirected,1010,,,1
+Sage M.,Danish,Undirected,1011,,,1

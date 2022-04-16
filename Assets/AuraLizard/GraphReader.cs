@@ -11,10 +11,19 @@ public class GraphReader
 	static string LINE_SPLIT_RE = @"\n";
 	static char[] TRIM_CHARS = { '\"', '\r', '\n', '.', ' '};
 	
-	public static Dictionary<string, List<string>> LoadAdjecencyList(string filePath)
+	public static Dictionary<string, List<string>> LoadAdjecencyList(string filePath, bool isFileOutsideGame)
 	{
 		Dictionary<string, List<string>> graph = null;
-		string dataText = System.IO.File.ReadAllText(filePath);
+		string dataText;
+
+		if (!isFileOutsideGame)
+        {
+			TextAsset data = Resources.Load(filePath) as TextAsset;
+			dataText = data.text;
+		} else
+        {
+			dataText = System.IO.File.ReadAllText(filePath);
+		}
 
 		//TextAsset data = Resources.Load(filePath) as TextAsset;
 
