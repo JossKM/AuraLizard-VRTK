@@ -50,8 +50,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34504279ea63ef249b155f6a41684854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: 30f881dacff8af44ea19d8ed4add2e25, type: 2}
   label: {fileID: 1377170887580734745}
   audio: {fileID: 4970783720963609702}
+  eventOnPositionChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  eventOnPing:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1768870896718552504
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ public class Node : MonoBehaviour
     [SerializeField]
     public Dictionary<string, object> data = new Dictionary<string, object>();
  
+    [SerializeField]
+    public NodeVisualizationSettings settings;
 
     [Header("Game stuff")]
 
@@ -27,15 +29,12 @@ public class Node : MonoBehaviour
     [SerializeField]
     public NodeAudioResponse audio;
 
-    static float PING_DELAY = 0.25f;
-    static float SIGNAL_RANGE = 4.0f;
-    static float SIGNAL_LOSS = 1.0f/SIGNAL_RANGE;
-    static float SIGNAL_PING_THRESH = 0.01f;
     IEnumerator pingCoroutine = null;
 
     private Collider collider;
 
     public UnityEvent eventOnPositionChanged;
+    public UnityEvent eventOnPing;
 
     public Vector3 GetDimensions()
     {
@@ -56,12 +55,13 @@ public class Node : MonoBehaviour
 
     public void Ping(float signal, float delay)
     {
-        if (signal > SIGNAL_PING_THRESH)
+        if (signal > settings.SIGNAL_PING_THRESH)
         {
+            eventOnPing.Invoke();
             audio.Ping(signal, delay);
             foreach (Edge connection in outEdges)
             {
-                connection.destination.Ping(signal - SIGNAL_LOSS, delay + PING_DELAY);
+                connection.destination.Ping(signal - settings.SIGNAL_LOSS, delay + settings.PING_DELAY);
             }
         }
     }

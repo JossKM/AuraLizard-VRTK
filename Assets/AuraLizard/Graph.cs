@@ -26,8 +26,10 @@ public class Graph : MonoBehaviour
     float nodeScale = 0.1f;
 
     [SerializeField]
-    public UnityEvent<Edge> eventOnEdgeCreation;
-    
+    public UnityEvent<Edge> eventOnEdgeAdded;
+    public UnityEvent<Edge> eventOnEdgeRemoved;
+    //public UnityEvent eventOnOutEdgeAdded;
+    //public UnityEvent eventOnEdgeRemoved;
 
     //will either get and return or just return a node by name. out param returns the Node with this name. If a Node was newly created then returns true
     public bool AddAndGetNode(string name, out Node outNode)
@@ -80,21 +82,20 @@ public class Graph : MonoBehaviour
         destination.inEdges.Add(edgeComponent);
     
         edgeComponent.UpdateVisual(edgeWidth);
-        eventOnEdgeCreation.Invoke(edgeComponent);
+        eventOnEdgeAdded.Invoke(edgeComponent);
     }
 
     public void RemoveEdge(Node source, Node destination, bool bothWays = false)
     {
-        //HashSet<Edge> toRemove = source.outEdges;
-        //toRemove.IntersectWith(destination.inEdges);
+        HashSet<Edge> allSharedEdges = source.outEdges;
+        allSharedEdges.IntersectWith(destination.inEdges);
 
-        foreach (Edge edge in source.outEdges)
+        foreach (Edge edge in allSharedEdges)
         {
-            if(destination.inEdges.Contains(edge))
-            {
-                RemoveEdge(edge);
-            }
+            Destroy(edge.gameObject);
+            edges.Remove(edge);
         }
+        allSharedEdges.Clear();
 
         if (bothWays)
         {
@@ -189,27 +190,6 @@ public class Graph : MonoBehaviour
             }
         }
     }
-
-    //public void GenerateEdges()
-    //{
-    //    foreach (Node source in nodes)
-    //    {
-    //        foreach(Node destination in source.connections)
-    //        {
-    //            AddEdge(source, destination);
-    //        }
-    //    }
-    //}
-
-    //public void UpdateEdges()
-    //{
-    //    foreach (var edge in edges)
-    //    {
-    //        Destroy(edge);
-    //    }
-
-    //   GenerateEdges();
-    //}
 
     public void RunScaledPageRank(int kIterations, double scalingFactor, float iterationDelaySeconds)
     {
