@@ -350,7 +350,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -2128396287530985555, guid: 3d437fae06d5fd145ae3d68e17c206c5,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 00c9b5d24ad154d4fb39859d295a974a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5f4e276cf2032ca459599b2912808855, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -449,6 +449,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audio: {fileID: 42924770598079702}
-  ping: {fileID: 8300000, guid: 00c9b5d24ad154d4fb39859d295a974a, type: 3}
+  ping: {fileID: 8300000, guid: 5f4e276cf2032ca459599b2912808855, type: 3}
   newCol: {r: 0, g: 0, b: 0, a: 0}
   renderer: {fileID: 7224171075863892832}

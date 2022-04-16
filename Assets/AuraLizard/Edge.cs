@@ -11,10 +11,13 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
     [SerializeField]
     Renderer renderer;
 
-    public void Start()
-    {
-        renderer = GetComponent<Renderer>();
-    }
+    [SerializeField]
+    AudioSource audio;
+
+    [SerializeField]
+    AudioClip edgePingSound;
+    [SerializeField]
+    AudioClip notifSound;
 
     public bool Equals(Edge other)
     {
@@ -49,6 +52,29 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
     public void SetHighlighted(Color newColor)
     {
         renderer.material.SetColor("_EmissionColor", newColor);
+    }
+
+    public void Ping(float signal, float delay)
+    {
+        if (signal > source.settings.SIGNAL_PING_THRESH)
+        {
+            StartCoroutine(PingCoroutine(signal, delay));
+        }
+    }
+
+    IEnumerator PingCoroutine(float signal, float delay)
+    {
+        //audio.PlayDelayed(delay);
+        yield return new WaitForSeconds(delay);
+        AudioSource.PlayClipAtPoint(edgePingSound, Vector3.Lerp(source.transform.position, destination.transform.position, 0.5f));
+        destination.Ping(signal - source.settings.SIGNAL_LOSS, delay + source.settings.PING_DELAY);
+    }
+
+    public void PlayNotifSound(float pitch)
+    {
+        audio.pitch = pitch;
+        audio.clip = notifSound;
+        audio.Play();
     }
 }
 

@@ -31,7 +31,12 @@ public class Graph : MonoBehaviour
     //public UnityEvent eventOnOutEdgeAdded;
     //public UnityEvent eventOnEdgeRemoved;
 
-    //will either get and return or just return a node by name. out param returns the Node with this name. If a Node was newly created then returns true
+    /// <summary>
+    /// will either get and return or just return a node by name. out param returns the Node with this name. If a Node was newly created then returns true
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="outNode"></param>
+    /// <returns></returns>
     public bool AddAndGetNode(string name, out Node outNode)
     {
         if (nodeNames.ContainsKey(name)) // if node does not exist...
@@ -67,7 +72,7 @@ public class Graph : MonoBehaviour
     }
 
     //Will add edge to node and to the Graph
-    public void AddEdge(Node source, Node destination, float weight = 1.0f)
+    public Edge AddEdge(Node source, Node destination, float weight = 1.0f)
     {
         GameObject newEdgeObject = Instantiate(edgePrefab);
         newEdgeObject.name = destination.name;
@@ -83,6 +88,7 @@ public class Graph : MonoBehaviour
     
         edgeComponent.UpdateVisual(edgeWidth);
         eventOnEdgeAdded.Invoke(edgeComponent);
+        return edgeComponent;
     }
 
     public void RemoveEdge(Node source, Node destination, bool bothWays = false)

@@ -5582,6 +5582,18 @@ RectTransform:
   m_AnchoredPosition: {x: -5.000061, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!23 &1900379353 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7271956787412934813, guid: f97bd1c93b6672d409b3e0fe07a6981f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7271956786922931252}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1900379355 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 9207261507988052140, guid: f97bd1c93b6672d409b3e0fe07a6981f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7271956786922931252}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1937127561
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6271,6 +6283,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082245689}
   m_CullTransparentMesh: 1
+--- !u!135 &2084786061 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 3937886865575249415, guid: 36a11cc1d71556346bd7a326b1413a5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1798736950838914794}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1798736950838914794
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6278,6 +6296,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 578126983}
     m_Modifications:
+    - target: {fileID: 1381982074, guid: 36a11cc1d71556346bd7a326b1413a5b, type: 3}
+      propertyPath: collider
+      value: 
+      objectReference: {fileID: 2084786061}
     - target: {fileID: 838217213842474400, guid: 36a11cc1d71556346bd7a326b1413a5b,
         type: 3}
       propertyPath: m_Name
@@ -6620,6 +6642,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 578126983}
     m_Modifications:
+    - target: {fileID: -7851647088362052354, guid: f97bd1c93b6672d409b3e0fe07a6981f,
+        type: 3}
+      propertyPath: audio
+      value: 
+      objectReference: {fileID: 1900379355}
+    - target: {fileID: -7851647088362052354, guid: f97bd1c93b6672d409b3e0fe07a6981f,
+        type: 3}
+      propertyPath: renderer
+      value: 
+      objectReference: {fileID: 1900379353}
+    - target: {fileID: -7851647088362052354, guid: f97bd1c93b6672d409b3e0fe07a6981f,
+        type: 3}
+      propertyPath: edgePingSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ef4377124a133834097594c11a2e2d5c, type: 3}
     - target: {fileID: 7271956787412934812, guid: f97bd1c93b6672d409b3e0fe07a6981f,
         type: 3}
       propertyPath: m_Name

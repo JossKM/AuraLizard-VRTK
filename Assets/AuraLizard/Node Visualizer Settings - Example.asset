@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef39905a78c1715428683750307186a0, type: 3}
   m_Name: Node Visualizer Settings - Example
   m_EditorClassIdentifier: 
+  nodeColor: {r: 0, g: 0, b: 0, a: 0}
   edgeColor: {r: 0, g: 0, b: 0, a: 0}
   selectEdgeColor: {r: 0, g: 0, b: 0, a: 0}
   selectNodeColor: {r: 0, g: 0, b: 0, a: 0}
+  PING_DELAY: 0.2
+  SIGNAL_RANGE: 4
+  SIGNAL_LOSS: 0.125
+  SIGNAL_PING_THRESH: 0.01
+  valuesToWatch: []

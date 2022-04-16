@@ -175,11 +175,17 @@ public class App : MonoBehaviour
     {
         graph.Clear();
 
+        int numNodesCreated = 0;
+
         foreach (KeyValuePair<string, List<string>> adjecencyEntry in adjecencyList)
         {
             string nameOfSourceNode = adjecencyEntry.Key;
 
-            graph.AddAndGetNode(nameOfSourceNode, out Node sourceNode);
+            if(graph.AddAndGetNode(nameOfSourceNode, out Node sourceNode))
+            {
+                numNodesCreated++;
+                sourceNode.audio.Ping(numNodesCreated * 0.1f, numNodesCreated * 0.02f);
+            }
 
             for (int edgeIndex = 0; edgeIndex < adjecencyEntry.Value.Count; edgeIndex++)
             {
@@ -391,20 +397,29 @@ public class App : MonoBehaviour
             }
         }
 
+
+        int numNodesAdded = 0;
         foreach (var additionTable in delta.edgeAdditions)
         {
             string sourceName = additionTable.Key;
 
             Node source;
-            graph.AddAndGetNode(sourceName, out source);
+            if(graph.AddAndGetNode(sourceName, out source))
+            {
+                numNodesAdded++;
+                source.audio.Ping(numNodesAdded * 0.125f, 0.0f);
+            }
 
+            int numEdgesAdded = 0;
             foreach (var edge in additionTable.Value)
             {
                 Node destination;
                 graph.AddAndGetNode(edge, out destination);
-                graph.AddEdge(source, destination);
+                Edge newEdge = graph.AddEdge(source, destination);
+                newEdge.PlayNotifSound(NodeAudioResponse.PitchToRaiseByNotes(4.0f * numEdgesAdded));
 
                 yield return new WaitForSeconds(timeDelayBetweenChanges);
+                numEdgesAdded++;
             }
         }
     }

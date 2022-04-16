@@ -31,6 +31,7 @@ public class Node : MonoBehaviour
 
     IEnumerator pingCoroutine = null;
 
+    [SerializeField]
     private Collider collider;
 
     public UnityEvent eventOnPositionChanged;
@@ -49,7 +50,6 @@ public class Node : MonoBehaviour
 
     private void Awake()
     {
-        collider = GetComponentInChildren<Collider>();
         eventOnPositionChanged.AddListener(OnPositionChangedListener);
     }
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class NodeAudioResponse : MonoBehaviour
 {
-    const float FREQ_MULTIPLIER_BASE = 1.059463094359f; // Twelfth root of two, part of equation to map frequencies of notes according to https://pages.mtu.edu/~suits/NoteFreqCalcs.html
-    const float PITCH_HALF_STEPS_PER_SIGNAL = 8.0f; // split signal into 
+    static float FREQ_MULTIPLIER_BASE = 1.059463094359f; // Twelfth root of two, part of equation to map frequencies of notes according to https://pages.mtu.edu/~suits/NoteFreqCalcs.html
+    static float PITCH_HALF_STEPS_PER_SIGNAL = 8.0f; // split signal into 
 
     [SerializeField]
     AudioSource audio;
@@ -71,12 +71,17 @@ public class NodeAudioResponse : MonoBehaviour
         transform.localScale = new Vector3(currentScale, currentScale, currentScale);
     }
 
+    public static float PitchToRaiseByNotes(float numHalfSteps)
+    {
+       return Mathf.Pow(FREQ_MULTIPLIER_BASE, numHalfSteps);
+    }
+
     private IEnumerator AudioResponseCoroutine(float signal, float delay)
     {
         yield return new WaitForSeconds(delay);
         audio.Stop();
         audio.volume = signal;
-        float frequencyMultiplier = Random.Range(0.995f, 1.005f) * Mathf.Pow(FREQ_MULTIPLIER_BASE, ((PITCH_HALF_STEPS_PER_SIGNAL) * (1.0f - signal)) - PITCH_HALF_STEPS_PER_SIGNAL);
+        float frequencyMultiplier = Random.Range(0.995f, 1.005f) * PitchToRaiseByNotes(((PITCH_HALF_STEPS_PER_SIGNAL) * (1.0f - signal)) - PITCH_HALF_STEPS_PER_SIGNAL); ;
         audio.pitch = frequencyMultiplier;
 
         audio.Play();
