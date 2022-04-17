@@ -12,7 +12,6 @@ AudioMixerGroupController:
   m_Children:
   - {fileID: 6595600739599698881}
   - {fileID: -2128396287530985555}
-  - {fileID: -8711060463417761007}
   m_Volume: af1a59da23476924ba84c52d6755a000
   m_Pitch: 7866b1f93f57e0d438debac4dca9870b
   m_Send: 00000000000000000000000000000000
@@ -83,7 +82,8 @@ AudioMixerGroupController:
   m_Name: Edges
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: ec0a15ccded92c1499873197d2e39bc1
-  m_Children: []
+  m_Children:
+  - {fileID: -8711060463417761007}
   m_Volume: f73240a28965ee14da8ad5dfc30a3acd
   m_Pitch: e1690b40ee371b6429e0562229d0c087
   m_Send: 00000000000000000000000000000000
@@ -165,8 +165,11 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: df479625e704a04418dfe059ac39b5ee
   m_FloatValues:
-    8bc1fa46986d712449d49bfded063ccd: -10.345207
-    21786fc9e62539a4cb5a73277fea9e12: -19.928478
+    f73240a28965ee14da8ad5dfc30a3acd: -9.833286
+    8bc1fa46986d712449d49bfded063ccd: -9.833291
+    a919aec7d1923734ab9fd33727c3165e: -10.345207
+    21786fc9e62539a4cb5a73277fea9e12: -10.34521
+    af1a59da23476924ba84c52d6755a000: -10.345207
   m_TransitionOverrides: {}
 --- !u!244 &3932117041588730795
 AudioMixerEffectController:

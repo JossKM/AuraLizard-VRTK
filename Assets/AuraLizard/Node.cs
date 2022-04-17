@@ -17,9 +17,6 @@ public class Node : MonoBehaviour
 
     [SerializeField]
     public Dictionary<string, object> data = new Dictionary<string, object>();
- 
-    [SerializeField]
-    public NodeVisualizationSettings settings;
 
     [Header("Game stuff")]
 
@@ -27,7 +24,7 @@ public class Node : MonoBehaviour
     public TMPro.TextMeshPro label;
 
     [SerializeField]
-    public NodeAudioResponse audio;
+    public AudioResponsiveElement audioResponse;
 
     IEnumerator pingCoroutine = null;
 
@@ -48,6 +45,11 @@ public class Node : MonoBehaviour
         return maxRadius;
     }
 
+    //public void UpdateRadius(float newRadius)
+    //{
+    //    audioResponse.Initialize();
+    //}
+
     private void Awake()
     {
         eventOnPositionChanged.AddListener(OnPositionChangedListener);
@@ -55,15 +57,21 @@ public class Node : MonoBehaviour
 
     public void Ping(float signal, float delay)
     {
-        if (signal > settings.SIGNAL_PING_THRESH)
+        if (signal > audioResponse.settings.SIGNAL_PING_THRESH)
         {
             eventOnPing.Invoke();
-            audio.Ping(signal, delay);
+            audioResponse.Ping(ClipType.NodePing, signal, delay);
             foreach (Edge connection in outEdges)
             {
-                connection.destination.Ping(signal - settings.SIGNAL_LOSS, delay + settings.PING_DELAY);
+                connection.Ping(signal - audioResponse.settings.SIGNAL_LOSS, delay + audioResponse.settings.PING_DELAY);
+                //connection.destination.Ping(signal - settings.SIGNAL_LOSS, delay + settings.PING_DELAY);
             }
         }
+    }
+
+    public void Notif(float signal)
+    {
+        audioResponse.Ping(ClipType.NodeNotif, signal, 0.0f);
     }
 
     private void OnPositionChangedListener()

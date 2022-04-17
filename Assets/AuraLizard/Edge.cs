@@ -11,13 +11,16 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
     [SerializeField]
     Renderer renderer;
 
-    [SerializeField]
-    AudioSource audio;
+    //[SerializeField]
+    //AudioSource audio;
 
     [SerializeField]
-    AudioClip edgePingSound;
-    [SerializeField]
-    AudioClip notifSound;
+    AudioResponsiveElement audioResponse;
+
+    //[SerializeField]
+    //AudioClip edgePingSound;
+    //[SerializeField]
+    //AudioClip notifSound;
 
     public bool Equals(Edge other)
     {
@@ -47,6 +50,7 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
         transform.localScale = new Vector3(width, width, distance);
         transform.position = source.transform.position;
         transform.rotation = Quaternion.LookRotation(toTarget, Vector3.up);
+        audioResponse.SetBaseScale(transform.localScale);
     }
 
     public void SetHighlighted(Color newColor)
@@ -56,25 +60,32 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
 
     public void Ping(float signal, float delay)
     {
-        if (signal > source.settings.SIGNAL_PING_THRESH)
+        if (signal > audioResponse.settings.SIGNAL_PING_THRESH)
         {
-            StartCoroutine(PingCoroutine(signal, delay));
+            //StartCoroutine(PingCoroutine(signal, delay));
+            audioResponse.Ping(ClipType.EdgePing, signal, delay);
+            destination.Ping(signal - audioResponse.settings.SIGNAL_LOSS, delay + audioResponse.settings.PING_DELAY);
         }
     }
 
-    IEnumerator PingCoroutine(float signal, float delay)
+    public void Notif(float signal, Color glowColor)
     {
-        //audio.PlayDelayed(delay);
-        yield return new WaitForSeconds(delay);
-        AudioSource.PlayClipAtPoint(edgePingSound, Vector3.Lerp(source.transform.position, destination.transform.position, 0.5f));
-        destination.Ping(signal - source.settings.SIGNAL_LOSS, delay + source.settings.PING_DELAY);
+        audioResponse.Ping(ClipType.EdgeNotif, signal, signal, 0.0f, glowColor);
     }
 
-    public void PlayNotifSound(float pitch)
-    {
-        audio.pitch = pitch;
-        audio.clip = notifSound;
-        audio.Play();
-    }
+    //IEnumerator PingCoroutine(float signal, float delay)
+    //{
+    //    //audio.PlayDelayed(delay);
+    //    yield return new WaitForSeconds(delay);
+    //    AudioSource.PlayClipAtPoint(edgePingSound, Vector3.Lerp(source.transform.position, destination.transform.position, 0.5f));
+    //    destination.Ping(signal - source.settings.SIGNAL_LOSS, delay + source.settings.PING_DELAY);
+    //}
+
+    //public void PlayNotifSound(float pitch)
+    //{
+    //    audio.pitch = pitch;
+    //    audio.clip = notifSound;
+    //    audio.Play();
+    //}
 }
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7271956787412934813}
   - component: {fileID: -7851647088362052354}
   - component: {fileID: 9207261507988052140}
+  - component: {fileID: 1290113871}
   m_Layer: 0
   m_Name: EdgePrefab
   m_TagString: Untagged
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 72036b3a68bdb204b9ea5ad57bae9a9e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,7 +99,8 @@ MonoBehaviour:
   source: {fileID: 0}
   destination: {fileID: 0}
   weight: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 7271956787412934813}
+  audioResponse: {fileID: 1290113871}
 --- !u!82 &9207261507988052140
 AudioSource:
   m_ObjectHideFlags: 0
@@ -111,7 +113,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -8711060463417761007, guid: 3d437fae06d5fd145ae3d68e17c206c5,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: ef4377124a133834097594c11a2e2d5c, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
@@ -196,3 +198,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1290113871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7271956787412934812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3afe8d58935311c4bb4430c394962d65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audio: {fileID: 9207261507988052140}
+  settings: {fileID: 11400000, guid: 30f881dacff8af44ea19d8ed4add2e25, type: 2}
+  renderer: {fileID: 7271956787412934813}

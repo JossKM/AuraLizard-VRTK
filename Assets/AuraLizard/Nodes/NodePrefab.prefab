@@ -50,9 +50,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34504279ea63ef249b155f6a41684854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 30f881dacff8af44ea19d8ed4add2e25, type: 2}
   label: {fileID: 1377170887580734745}
-  audio: {fileID: 4970783720963609702}
+  audioResponse: {fileID: 4970783720963609702}
+  collider: {fileID: 3937886865575249415}
   eventOnPositionChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -449,6 +449,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audio: {fileID: 42924770598079702}
-  ping: {fileID: 8300000, guid: 5f4e276cf2032ca459599b2912808855, type: 3}
-  newCol: {r: 0, g: 0, b: 0, a: 0}
+  settings: {fileID: 11400000, guid: 30f881dacff8af44ea19d8ed4add2e25, type: 2}
   renderer: {fileID: 7224171075863892832}

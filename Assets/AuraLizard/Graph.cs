@@ -249,5 +249,30 @@ public class Graph : MonoBehaviour
 
             yield return new WaitForSeconds(iterationDelaySeconds);
         }
+
+        MapPropertyToPitchForAllNodes_Double(PAGE_RANK, 0.0, 1.0, 0.0, 4.0);
+    }
+
+
+    public void MapPropertyToPitchForAllNodes_Double(string property, double minValue, double maxValue, double minOffset, double maxOffset)
+    {
+        foreach(Node node in nodes)
+        {
+            if(node.data.ContainsKey(property))
+            {
+                double myValue = (double)node.data[property];
+                float freqOffset = (float)InterpolationUtils.Lmap(myValue, minValue, maxValue, minOffset, maxOffset);
+                node.audioResponse.frequencyOffset = freqOffset;
+               //
+            }
+        }
+    }
+
+    public void ResetPitchForAllNodes()
+    {
+        foreach (Node node in nodes)
+        {
+            node.audioResponse.frequencyOffset = 0;
+        }
     }
 }

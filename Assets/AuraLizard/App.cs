@@ -57,6 +57,9 @@ public class App : MonoBehaviour
     private Node selectedNode = null;
 
     [SerializeField]
+    NodeVisualizationSettings settings;
+
+    [SerializeField]
     GameObject selectionSphere;
     [SerializeField]
     GameObject hoverSphere;
@@ -65,8 +68,6 @@ public class App : MonoBehaviour
     bool isEditModeOn;
     public UnityEvent<bool> eventToggleEditMode;
     public UnityEvent<float> eventAnimationUpdate;
-
-    public UnityEvent eventPageRank;
 
     [Header("Time series graph")]
     [SerializeField]
@@ -102,7 +103,8 @@ public class App : MonoBehaviour
             //If selected a second node after this one?
             if (isEditModeOn && selectedNode != null && selectedNode != node)
             {
-                graph.AddEdge(selectedNode, node);
+                Edge added = graph.AddEdge(selectedNode, node);
+                added.Notif(1.0f, Color.green);
             }
 
             selectedNode = node;
@@ -184,31 +186,40 @@ public class App : MonoBehaviour
             if(graph.AddAndGetNode(nameOfSourceNode, out Node sourceNode))
             {
                 numNodesCreated++;
-                sourceNode.audio.Ping(numNodesCreated * 0.1f, numNodesCreated * 0.02f);
+                sourceNode.audioResponse.Ping(ClipType.NodePing, 1.0f / (1.0f + numNodesCreated), numNodesCreated * 0.2f);
             }
 
             for (int edgeIndex = 0; edgeIndex < adjecencyEntry.Value.Count; edgeIndex++)
             {
                 string nameOfDestinationNode = adjecencyEntry.Value[edgeIndex];
 
-                graph.AddAndGetNode(nameOfDestinationNode, out Node destinationNode);
+                if(graph.AddAndGetNode(nameOfDestinationNode, out Node destinationNode))
+                {
+                    numNodesCreated++;
+                    sourceNode.audioResponse.Ping(ClipType.NodePing, 1.0f / (1.0f + numNodesCreated), numNodesCreated * 0.2f);
+                }
+
                 graph.AddEdge(sourceNode, destinationNode);
             }
         }
+    }
+
+    private void Awake()
+    {
+        settings.Initialize();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         eventToggleEditMode.AddListener(ToggleEditModeListener);
-        eventPageRank.AddListener(RunPageRankListener);
     }
 
     public void Update()
     {
         if (Keyboard.current.rKey.wasPressedThisFrame)
         {
-            graph.RandomizeEdges(0.5f);
+            Randomize();
         }
 
         if (Keyboard.current.tabKey.wasPressedThisFrame)
@@ -230,6 +241,11 @@ public class App : MonoBehaviour
         {
             LoadExampleData();
         }
+    }
+
+    public void Randomize()
+    {
+        graph.RandomizeEdges(0.5f);
     }
 
     public void CalculateDeltas()
@@ -261,6 +277,7 @@ public class App : MonoBehaviour
         }
         CalculateDeltas();
         SetGraphFromAdjecencyList(adjecencyAnim[0]);
+        animTimeIndex = 0;
     }
 
     private void LoadAllFilesInFolder(string folderPath, bool isExternal)
@@ -278,6 +295,7 @@ public class App : MonoBehaviour
             }
         }
         SetGraphFromAdjecencyList(adjecencyAnim[0]);
+        animTimeIndex = 0;
         CalculateDeltas();
     }
 
@@ -299,14 +317,14 @@ public class App : MonoBehaviour
         {
             //  Debug.LogError("Failed to open file: " + ofn.file + " -- " + e.Message);
 
-            try
-            {
+          //  try
+          //  {
                 LoadAllFilesInFolder(ofn.file, true);
-            }
-            catch (Exception ef)
-            {
-                Debug.LogError("Failed to open file: " + ofn.file + " -- " + ef.Message);
-            }
+         //   }
+          // catch (Exception ef)
+          // {
+          //     Debug.LogError("Failed to open file: " + ofn.file + " -- " + ef.Message);
+          // }
         }
     }
     public void ToggleEditMode(bool on)
@@ -319,9 +337,9 @@ public class App : MonoBehaviour
         isEditModeOn = on;
     }
 
-    private void RunPageRankListener()
+    public void RunPageRank()
     {
-        graph.RunScaledPageRank(3000, 0.9, 0.01f);
+        graph.RunScaledPageRank(50, 0.1, 0.00f);
     }
 
     public void PlayAnim()
@@ -407,7 +425,7 @@ public class App : MonoBehaviour
             if(graph.AddAndGetNode(sourceName, out source))
             {
                 numNodesAdded++;
-                source.audio.Ping(numNodesAdded * 0.125f, 0.0f);
+                source.audioResponse.Ping(ClipType.NodePing, 1.0f / (1.0f + numNodesAdded), 0.0f);
             }
 
             int numEdgesAdded = 0;
@@ -416,7 +434,9 @@ public class App : MonoBehaviour
                 Node destination;
                 graph.AddAndGetNode(edge, out destination);
                 Edge newEdge = graph.AddEdge(source, destination);
-                newEdge.PlayNotifSound(NodeAudioResponse.PitchToRaiseByNotes(4.0f * numEdgesAdded));
+                newEdge.Notif(1.0f/(1.0f + numEdgesAdded), Color.green);
+
+                //AudioResponsiveElement.PitchToRaiseByNotes(8.0f * numEdgesAdded)
 
                 yield return new WaitForSeconds(timeDelayBetweenChanges);
                 numEdgesAdded++;
