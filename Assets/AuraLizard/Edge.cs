@@ -68,9 +68,9 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
         }
     }
 
-    public void Notif(float signal, Color glowColor)
+    public void Notif(float volume, float speed, Color glowColor)
     {
-        audioResponse.Ping(ClipType.EdgeNotif, signal, signal, 0.0f, glowColor);
+        audioResponse.Ping(ClipType.EdgeNotif, volume, speed, 0.0f, glowColor);
     }
 
     //IEnumerator PingCoroutine(float signal, float delay)

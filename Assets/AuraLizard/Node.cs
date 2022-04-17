@@ -69,9 +69,14 @@ public class Node : MonoBehaviour
         }
     }
 
-    public void Notif(float signal)
+    public void Notif(ClipType type, float volume, float speed, Color glowColor)
     {
-        audioResponse.Ping(ClipType.NodeNotif, signal, 0.0f);
+        audioResponse.Ping(type, volume, speed, 0.0f, glowColor);
+    }
+
+    public void Notif(float volume, float speed, Color glowColor)
+    {
+        audioResponse.Ping(ClipType.NodeNotif, volume, speed, 0.0f, glowColor);
     }
 
     private void OnPositionChangedListener()

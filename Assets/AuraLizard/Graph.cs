@@ -210,8 +210,21 @@ public class Graph : MonoBehaviour
         double initialValue = 1.0 / N;
         foreach (Node node in nodes) // Initialize values
         {
-            node.data.Add(PAGE_RANK, initialValue);
-            node.data.Add(PAGE_RANK_IN, new double());
+            if(node.data.ContainsKey(PAGE_RANK))
+            {
+                node.data[PAGE_RANK] = initialValue;
+            } else
+            {
+                node.data.Add(PAGE_RANK, initialValue);
+            }
+
+            if (node.data.ContainsKey(PAGE_RANK_IN))
+            {
+                node.data[PAGE_RANK_IN] = new double();
+            } else
+            {
+                node.data.Add(PAGE_RANK_IN, new double());
+            }
         }
 
         for(int i = 0; i < kIterations; i++) // PageRank update

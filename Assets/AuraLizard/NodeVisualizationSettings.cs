@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ClipType
-{ 
+{
     NodePing,
     NodeNotif,
     EdgePing,
-    EdgeNotif
+    EdgeNotif,
+    NodeHover
 }
 
 

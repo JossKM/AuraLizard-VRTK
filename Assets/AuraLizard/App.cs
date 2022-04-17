@@ -55,6 +55,7 @@ public class App : MonoBehaviour
     public Graph graph;
 
     private Node selectedNode = null;
+    private Node hoveredNode = null;
 
     [SerializeField]
     NodeVisualizationSettings settings;
@@ -104,7 +105,7 @@ public class App : MonoBehaviour
             if (isEditModeOn && selectedNode != null && selectedNode != node)
             {
                 Edge added = graph.AddEdge(selectedNode, node);
-                added.Notif(1.0f, Color.green);
+                added.Notif(1.0f, 2.0f, Color.green);
             }
 
             selectedNode = node;
@@ -120,9 +121,16 @@ public class App : MonoBehaviour
         if (node == null)
         {
             hoverSphere.SetActive(false);
+            hoveredNode = null;
         }
         else
         {
+            if(node != hoveredNode)
+            {
+                node.Notif(ClipType.NodeHover, 0.05f, 2.0f, Color.blue);
+                hoveredNode = node;
+            }
+        
             hoverSphere.SetActive(true);
             hoverSphere.transform.position = node.gameObject.transform.position;
             hoverSphere.transform.localScale = node.GetDimensions() * 2.5f;
@@ -434,7 +442,7 @@ public class App : MonoBehaviour
                 Node destination;
                 graph.AddAndGetNode(edge, out destination);
                 Edge newEdge = graph.AddEdge(source, destination);
-                newEdge.Notif(1.0f/(1.0f + numEdgesAdded), Color.green);
+                newEdge.Notif(0.5f, 1.0f/(1.0f + numEdgesAdded), Color.green);
 
                 //AudioResponsiveElement.PitchToRaiseByNotes(8.0f * numEdgesAdded)
 
