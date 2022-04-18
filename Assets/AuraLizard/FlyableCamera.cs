@@ -136,17 +136,22 @@ public class FlyableCamera : MonoBehaviour
                 Debug.LogError("node raycast hit something else...?");
             }
 
-            if (Mouse.current.leftButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame && !app.isEditModeOn)
             {
                 app.SelectNode(node);
                 node.Ping(1.0f, 0.0f);
             }
-            else if (Mouse.current.leftButton.isPressed) // Drag
+            else if (Mouse.current.leftButton.isPressed && app.isEditModeOn) // Drag
             {
-                node.transform.Translate(Mouse.current.delta.x.ReadValue() * moveSpeed * Time.deltaTime,
-                        Mouse.current.delta.y.ReadValue() * moveSpeed * Time.deltaTime, 0, camera.transform);
+                Plane dragPlane = new Plane(-camera.transform.forward, node.transform.position);
+                if(dragPlane.Raycast(ray, out float enter)); // project mouse position onto the plane of view
+                {
+                    node.transform.position = ray.GetPoint(enter); // Set node to that position
+                    node.eventOnPositionChanged.Invoke();
+                    app.HoverNode(node);
+                    app.SelectNode(node);
+                }
                 
-                node.eventOnPositionChanged.Invoke();
             } else
             {
                 app.HoverNode(node);

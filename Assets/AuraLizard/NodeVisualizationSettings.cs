@@ -8,7 +8,11 @@ public enum ClipType
     NodeNotif,
     EdgePing,
     EdgeNotif,
-    NodeHover
+    NodeHover,
+    NodeCreate,
+    NodeDestroy,
+    EdgeCreate,
+    EdgeDestroy
 }
 
 
@@ -40,6 +44,8 @@ public class NodeVisualizationSettings : ScriptableObject
 
     public float PING_SCALE_SAMPLE = 1.0f;
     public float PING_SCALE_BASE = 0.25f;
+
+    public float restBetweenNotes = 1.0f / 32.0f;
 
     public string[] valuesToWatch;
 

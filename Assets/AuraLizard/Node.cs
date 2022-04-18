@@ -72,6 +72,7 @@ public class Node : MonoBehaviour
     public void Notif(ClipType type, float volume, float speed, Color glowColor)
     {
         audioResponse.Ping(type, volume, speed, 0.0f, glowColor);
+        audioResponse.Ping(type, volume, speed, 0.0f, glowColor);
     }
 
     public void Notif(float volume, float speed, Color glowColor)

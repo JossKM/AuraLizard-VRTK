@@ -28,7 +28,8 @@ public class AdjecencyListDelta
             if (!a.ContainsKey(newAdjecency.Key))
             {
                 a.Add(newAdjecency.Key, newAdjecency.Value); // An entire node was added
-            } else
+            }
+            else
             {
                 foreach (string edge in newAdjecency.Value)
                 {
@@ -66,7 +67,7 @@ public class App : MonoBehaviour
     GameObject hoverSphere;
 
     [SerializeField]
-    bool isEditModeOn;
+    public bool isEditModeOn;
     public UnityEvent<bool> eventToggleEditMode;
     public UnityEvent<float> eventAnimationUpdate;
 
@@ -83,8 +84,8 @@ public class App : MonoBehaviour
     [SerializeField]
     int animTimeIndex = 0;
 
-   //[SerializeField]
-   //List<QueuableCommand> editQueue;
+    //[SerializeField]
+    //List<QueuableCommand> editQueue;
 
     //Equivalent to calling SelectNode(null)
     public void DeselectNode()
@@ -105,7 +106,7 @@ public class App : MonoBehaviour
             if (isEditModeOn && selectedNode != null && selectedNode != node)
             {
                 Edge added = graph.AddEdge(selectedNode, node);
-                added.Notif(1.0f, 2.0f, Color.green);
+                added.Notif(ClipType.EdgeCreate, 1.0f, 1.0f, Color.green);
             }
 
             selectedNode = node;
@@ -125,12 +126,12 @@ public class App : MonoBehaviour
         }
         else
         {
-            if(node != hoveredNode)
+            if (node != hoveredNode)
             {
                 node.Notif(ClipType.NodeHover, 0.05f, 2.0f, Color.blue);
                 hoveredNode = node;
             }
-        
+
             hoverSphere.SetActive(true);
             hoverSphere.transform.position = node.gameObject.transform.position;
             hoverSphere.transform.localScale = node.GetDimensions() * 2.5f;
@@ -191,20 +192,20 @@ public class App : MonoBehaviour
         {
             string nameOfSourceNode = adjecencyEntry.Key;
 
-            if(graph.AddAndGetNode(nameOfSourceNode, out Node sourceNode))
+            if (graph.AddAndGetNode(nameOfSourceNode, out Node sourceNode))
             {
+                PingNodeCreated(sourceNode, numNodesCreated, numNodesCreated * settings.restBetweenNotes);
                 numNodesCreated++;
-                sourceNode.audioResponse.Ping(ClipType.NodePing, 1.0f / (1.0f + numNodesCreated), numNodesCreated * 0.2f);
             }
 
             for (int edgeIndex = 0; edgeIndex < adjecencyEntry.Value.Count; edgeIndex++)
             {
                 string nameOfDestinationNode = adjecencyEntry.Value[edgeIndex];
 
-                if(graph.AddAndGetNode(nameOfDestinationNode, out Node destinationNode))
+                if (graph.AddAndGetNode(nameOfDestinationNode, out Node destinationNode))
                 {
+                    PingNodeCreated(destinationNode, numNodesCreated, numNodesCreated * settings.restBetweenNotes);
                     numNodesCreated++;
-                    sourceNode.audioResponse.Ping(ClipType.NodePing, 1.0f / (1.0f + numNodesCreated), numNodesCreated * 0.2f);
                 }
 
                 graph.AddEdge(sourceNode, destinationNode);
@@ -325,14 +326,14 @@ public class App : MonoBehaviour
         {
             //  Debug.LogError("Failed to open file: " + ofn.file + " -- " + e.Message);
 
-          //  try
-          //  {
-                LoadAllFilesInFolder(ofn.file, true);
-         //   }
-          // catch (Exception ef)
-          // {
-          //     Debug.LogError("Failed to open file: " + ofn.file + " -- " + ef.Message);
-          // }
+            //  try
+            //  {
+            LoadAllFilesInFolder(ofn.file, true);
+            //   }
+            // catch (Exception ef)
+            // {
+            //     Debug.LogError("Failed to open file: " + ofn.file + " -- " + ef.Message);
+            // }
         }
     }
     public void ToggleEditMode(bool on)
@@ -365,20 +366,20 @@ public class App : MonoBehaviour
 
     public void SetNormalizedTimeTo(float time)
     {
-       int newTime = Mathf.FloorToInt(time * (float)(adjecencyAnim.Count - 1));
+        int newTime = Mathf.FloorToInt(time * (float)(adjecencyAnim.Count - 1));
         ApplyDeltaToGraph(new AdjecencyListDelta(adjecencyAnim[animTimeIndex], adjecencyAnim[newTime]));
     }
 
     IEnumerator AnimateTimeSeries(float timeDelay, int startTime = 0)
     {
         //Go from whatever frame we are on to the starting frame
-        yield return StartCoroutine(ApplyDeltaToGraphCoroutine(new AdjecencyListDelta(adjecencyAnim[animTimeIndex], adjecencyAnim[startTime])));
+        yield return StartCoroutine(ApplyDeltaToGraphCoroutine(new AdjecencyListDelta(adjecencyAnim[animTimeIndex], adjecencyAnim[startTime]), settings.restBetweenNotes));
         animTimeIndex = startTime;
         eventAnimationUpdate.Invoke(GetNormalizedTime());
         while (animTimeIndex < adjecencyDeltaAnim.Count)
         {
+            yield return StartCoroutine(ApplyDeltaToGraphCoroutine(adjecencyDeltaAnim[animTimeIndex], settings.restBetweenNotes));
             yield return new WaitForSeconds(timeDelay);
-            yield return StartCoroutine(ApplyDeltaToGraphCoroutine(adjecencyDeltaAnim[animTimeIndex]));
             animTimeIndex++;//= Mathf.Min(animTimeIndex + 1, adjecencyAnim.Count - 1);
             eventAnimationUpdate.Invoke(GetNormalizedTime());
         }
@@ -423,32 +424,42 @@ public class App : MonoBehaviour
             }
         }
 
-
         int numNodesAdded = 0;
+        int numEdgesAdded = 0;
         foreach (var additionTable in delta.edgeAdditions)
         {
             string sourceName = additionTable.Key;
 
             Node source;
-            if(graph.AddAndGetNode(sourceName, out source))
+            if (graph.AddAndGetNode(sourceName, out source))
             {
+                PingNodeCreated(source, numNodesAdded, 0.0f);
                 numNodesAdded++;
-                source.audioResponse.Ping(ClipType.NodePing, 1.0f / (1.0f + numNodesAdded), 0.0f);
             }
 
-            int numEdgesAdded = 0;
             foreach (var edge in additionTable.Value)
             {
                 Node destination;
-                graph.AddAndGetNode(edge, out destination);
+                if (graph.AddAndGetNode(edge, out destination))
+                {
+                    PingNodeCreated(destination, numNodesAdded, 0.0f);
+                    numNodesAdded++;
+                }
+
                 Edge newEdge = graph.AddEdge(source, destination);
-                newEdge.Notif(0.5f, 1.0f/(1.0f + numEdgesAdded), Color.green);
-
-                //AudioResponsiveElement.PitchToRaiseByNotes(8.0f * numEdgesAdded)
-
-                yield return new WaitForSeconds(timeDelayBetweenChanges);
+                NotifEdgeCreated(newEdge, numEdgesAdded);
                 numEdgesAdded++;
+                yield return new WaitForSeconds(timeDelayBetweenChanges);
             }
         }
+    }
+
+    void PingNodeCreated(Node node, int numCreated, float delay)
+    {
+        node.audioResponse.Ping(ClipType.NodeCreate, 0.5f, AudioResponsiveElement.PitchToRaiseByNotes(numCreated), delay, Color.green);
+    }
+    void NotifEdgeCreated(Edge edge, int numCreated)
+    {
+        edge.Notif(ClipType.EdgeCreate, 0.5f, AudioResponsiveElement.PitchToRaiseByNotes(numCreated), Color.green);
     }
 }

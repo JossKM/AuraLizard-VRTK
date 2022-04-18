@@ -47,9 +47,9 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
 
         Vector3 toTarget = destination.transform.position - source.transform.position;
         float distance = toTarget.magnitude; //- destination.GetRadius() - source.GetRadius();
-        transform.localScale = new Vector3(width, width, distance);
         transform.position = source.transform.position;
         transform.rotation = Quaternion.LookRotation(toTarget, Vector3.up);
+        transform.localScale = new Vector3(width, width, distance + 0.05f);
         audioResponse.SetBaseScale(transform.localScale);
     }
 
@@ -68,10 +68,16 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
         }
     }
 
+    public void Notif(ClipType type, float volume, float speed, Color glowColor)
+    {
+        audioResponse.Ping(type, volume, speed, 0.0f, glowColor);
+    }
+
     public void Notif(float volume, float speed, Color glowColor)
     {
-        audioResponse.Ping(ClipType.EdgeNotif, volume, speed, 0.0f, glowColor);
+        Notif(ClipType.EdgeNotif, volume, speed, glowColor);
     }
+
 
     //IEnumerator PingCoroutine(float signal, float delay)
     //{

@@ -96,7 +96,7 @@ public class AudioResponsiveElement : MonoBehaviour
             renderer.material.SetColor("_EmissionColor", newCol);
             float scalar = baseScale.x + (baseScale.x * settings.PING_SCALE_BASE * sample) + (baseScale.x * settings.PING_SCALE_SAMPLE * scale); //Mathf.Lerp(0.01f + baseScale + (baseScale * pingScaleSample * sample) + (pingScaleBase * scale), currentScale, pingSmoothing);
 
-            if (type == ClipType.EdgeNotif || type == ClipType.EdgePing)
+            if (type == ClipType.EdgeNotif || type == ClipType.EdgePing || type == ClipType.EdgeCreate || type == ClipType.EdgeDestroy)
             {
                 transform.localScale = new Vector3(scalar, scalar, transform.localScale.z);
             }
