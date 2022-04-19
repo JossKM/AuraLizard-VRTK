@@ -270,7 +270,7 @@ public class App : MonoBehaviour
     public void LoadExampleData()
     {
         string basename = "example/day_";
-        int beginIndex = 1;
+        int beginIndex = 0;
         int endIndex = 30;
 
         for (int i = beginIndex; i <= endIndex; i++)
@@ -414,12 +414,14 @@ public class App : MonoBehaviour
 
     IEnumerator ApplyDeltaToGraphCoroutine(AdjecencyListDelta delta, float timeDelayBetweenChanges = 0.016f)
     {
+        int numSubtractions = 0;
         foreach (var subtractionTable in delta.edgeSubtractions)
         {
             string sourceName = subtractionTable.Key;
-            foreach (var edge in subtractionTable.Value)
+            foreach (var destinationNode in subtractionTable.Value)
             {
-                graph.RemoveEdge(sourceName, edge);
+                graph.RemoveEdgeWithSound(sourceName, destinationNode, numSubtractions);
+                numSubtractions++;
                 yield return new WaitForSeconds(timeDelayBetweenChanges);
             }
         }

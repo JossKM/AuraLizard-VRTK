@@ -15,7 +15,7 @@ public class Edge : MonoBehaviour, System.IEquatable<Edge>
     //AudioSource audio;
 
     [SerializeField]
-    AudioResponsiveElement audioResponse;
+    public AudioResponsiveElement audioResponse;
 
     //[SerializeField]
     //AudioClip edgePingSound;

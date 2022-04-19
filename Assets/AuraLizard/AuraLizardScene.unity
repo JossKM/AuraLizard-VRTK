@@ -6909,7 +6909,7 @@ PrefabInstance:
     - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
         type: 3}
       propertyPath: animTimeIntervalBetweenGraphs
-      value: 2
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 7049674538758390683, guid: 8d8396d7cce44834a9c63070067b60e3,
         type: 3}

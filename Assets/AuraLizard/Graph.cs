@@ -71,6 +71,57 @@ public class Graph : MonoBehaviour
         RemoveEdge(nodeNames[source], nodeNames[destination]);
     }
 
+    public void RemoveEdgeWithSound(string sourceStr, string destinationStr, int numDeleted, float duration = 5.0f)
+    {
+        Node source = nodeNames[sourceStr];
+        Node destination = nodeNames[destinationStr];
+
+        HashSet<Edge> allSharedEdges = new HashSet<Edge>(source.outEdges);
+        allSharedEdges.IntersectWith(destination.inEdges);
+
+        foreach (Edge edge in allSharedEdges)
+        {
+            edge.Notif(ClipType.EdgeDestroy, 0.5f, AudioResponsiveElement.PitchToRaiseByNotes(-numDeleted), Color.red);
+            Destroy(edge.gameObject, duration);
+            edges.Remove(edge);
+            destination.inEdges.Remove(edge);
+            source.outEdges.Remove(edge);
+        }
+
+        //StartCoroutine(RemoveEdgeCoroutine(nodeNames[source], nodeNames[destination], AudioResponsiveElement.PitchToRaiseByNotes(-numDeleted), duration));
+    }
+
+    //IEnumerator RemoveEdgeCoroutine(Node source, Node destination, float speed, float duration = 3.0f)
+    //{
+    //    HashSet<Edge> allSharedEdges = new HashSet<Edge>(source.outEdges);
+    //    allSharedEdges.IntersectWith(destination.inEdges);
+
+    //    foreach (Edge edge in allSharedEdges)
+    //    {
+    //        edge.Notif(ClipType.EdgeDestroy, 0.5f, speed, Color.red);
+    //        Destroy(edge.gameObject, duration);
+    //        edges.Remove(edge);
+    //        destination.inEdges.Remove(edge);
+    //        source.outEdges.Remove(edge);
+    //    }
+
+    //    //float timer = duration;
+    //    //while(timer > 0.0f)
+    //    //{
+    //    //    timer -= Time.deltaTime;
+    //    //    float tValue = (timer / duration);
+
+    //    //    foreach (Edge edge in allSharedEdges)
+    //    //    {
+    //    //        // edge.UpdateVisual(0.01f * tValue);
+    //    //       // edge.audioResponse.SetBaseScale(edge.transform.localScale * tValue);
+    //    //        //edge.transform.localScale = new Vector3(edge.transform.localScale.x, edge.transform.localScale.y, tValue);
+    //    //    }
+
+    //        yield return new WaitForEndOfFrame();
+    //    //}
+    //}
+
     //Will add edge to node and to the Graph
     public Edge AddEdge(Node source, Node destination, float weight = 1.0f)
     {
@@ -85,7 +136,7 @@ public class Graph : MonoBehaviour
         edges.Add(edgeComponent);
         source.outEdges.Add(edgeComponent);
         destination.inEdges.Add(edgeComponent);
-    
+
         edgeComponent.UpdateVisual(edgeWidth);
         eventOnEdgeAdded.Invoke(edgeComponent);
         return edgeComponent;
@@ -169,7 +220,7 @@ public class Graph : MonoBehaviour
         {
             Destroy(node.gameObject);
         }
-        foreach(Edge edge in edges)
+        foreach (Edge edge in edges)
         {
             Destroy(edge.gameObject);
         }
@@ -202,7 +253,7 @@ public class Graph : MonoBehaviour
         StartCoroutine(ScaledPageRank(kIterations, scalingFactor, iterationDelaySeconds));
     }
 
-   public IEnumerator ScaledPageRank(int kIterations, double scalingFactor, float iterationDelaySeconds)
+    public IEnumerator ScaledPageRank(int kIterations, double scalingFactor, float iterationDelaySeconds)
     {
         const string PAGE_RANK = "PageRank";
         const string PAGE_RANK_IN = "PageRankIn";
@@ -210,10 +261,11 @@ public class Graph : MonoBehaviour
         double initialValue = 1.0 / N;
         foreach (Node node in nodes) // Initialize values
         {
-            if(node.data.ContainsKey(PAGE_RANK))
+            if (node.data.ContainsKey(PAGE_RANK))
             {
                 node.data[PAGE_RANK] = initialValue;
-            } else
+            }
+            else
             {
                 node.data.Add(PAGE_RANK, initialValue);
             }
@@ -221,13 +273,14 @@ public class Graph : MonoBehaviour
             if (node.data.ContainsKey(PAGE_RANK_IN))
             {
                 node.data[PAGE_RANK_IN] = new double();
-            } else
+            }
+            else
             {
                 node.data.Add(PAGE_RANK_IN, new double());
             }
         }
 
-        for(int i = 0; i < kIterations; i++) // PageRank update
+        for (int i = 0; i < kIterations; i++) // PageRank update
         {
             foreach (Node node in nodes) // Initialize values
             {
@@ -236,10 +289,11 @@ public class Graph : MonoBehaviour
 
             foreach (Node node in nodes) //queue up next pageRank values
             {
-                if(node.outEdges.Count == 0)
+                if (node.outEdges.Count == 0)
                 {
                     node.data[PAGE_RANK_IN] = node.data[PAGE_RANK]; // If no edges give back to itself
-                } else
+                }
+                else
                 {
                     foreach (Edge edge in node.outEdges)
                     {
@@ -269,14 +323,14 @@ public class Graph : MonoBehaviour
 
     public void MapPropertyToPitchForAllNodes_Double(string property, double minValue, double maxValue, double minOffset, double maxOffset)
     {
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
-            if(node.data.ContainsKey(property))
+            if (node.data.ContainsKey(property))
             {
                 double myValue = (double)node.data[property];
                 float freqOffset = (float)InterpolationUtils.Lmap(myValue, minValue, maxValue, minOffset, maxOffset);
                 node.audioResponse.frequencyOffset = freqOffset;
-               //
+                //
             }
         }
     }

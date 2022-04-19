@@ -48,7 +48,6 @@ public class AudioResponsiveElement : MonoBehaviour
             StopCoroutine(pingCoroutine);
             pingCoroutine = null;
         }
-        RevertToDefault();
     }
 
     public void Ping(ClipType type, float signal, float delay)
@@ -89,24 +88,26 @@ public class AudioResponsiveElement : MonoBehaviour
         while (audio.isPlaying)
         {
             float sample = settings.audioSamples[(int)type][sampleIdx];
-            float progress = Mathf.Min((float)sampleIdx / (float)settings.audioSamples[(int)type].Length, 1.0f);
+            float progress = (float)sampleIdx / (float)settings.audioSamples[(int)type].Length;
             float scale = (1.0f - progress) * volume;
 
             Color newCol = glow * scale;
             renderer.material.SetColor("_EmissionColor", newCol);
             float scalar = baseScale.x + (baseScale.x * settings.PING_SCALE_BASE * sample) + (baseScale.x * settings.PING_SCALE_SAMPLE * scale); //Mathf.Lerp(0.01f + baseScale + (baseScale * pingScaleSample * sample) + (pingScaleBase * scale), currentScale, pingSmoothing);
 
-            if (type == ClipType.EdgeNotif || type == ClipType.EdgePing || type == ClipType.EdgeCreate || type == ClipType.EdgeDestroy)
+            if (type == ClipType.EdgeNotif || type == ClipType.EdgePing || type == ClipType.EdgeCreate)
             {
                 transform.localScale = new Vector3(scalar, scalar, transform.localScale.z);
-            }
-            else
+            }else if (type == ClipType.EdgeDestroy)
+            {
+                transform.localScale = new Vector3(scalar, scalar, transform.localScale.z) * scale;
+            } else
             {
                 transform.localScale = new Vector3(scalar, scalar, scalar);
             }
 
             yield return new WaitForEndOfFrame();
-            sampleIdx = audio.timeSamples;
+            sampleIdx = Mathf.Min(settings.audioSamples[(int)type].Length - 1, audio.timeSamples);
         }
     }
 

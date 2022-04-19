@@ -17,19 +17,19 @@ MonoBehaviour:
   selectEdgeColor: {r: 0.099599496, g: 0.8867924, b: 0.020914912, a: 0}
   selectNodeColor: {r: 0.40831158, g: 0.9433962, b: 0.10234961, a: 0}
   audioClips:
-  - {fileID: 8300000, guid: 5f4e276cf2032ca459599b2912808855, type: 3}
   - {fileID: 8300000, guid: af6c013b8cacd0048b0300937f045fe5, type: 3}
-  - {fileID: 8300000, guid: ef4377124a133834097594c11a2e2d5c, type: 3}
-  - {fileID: 8300000, guid: 40a3458d4d267544eb43e68e285789de, type: 3}
-  - {fileID: 8300000, guid: 8963efdca37b2b84e9506335510bb39c, type: 3}
+  - {fileID: 8300000, guid: a1f73ba008546864b82c181ef099be38, type: 3}
+  - {fileID: 8300000, guid: 5f4e276cf2032ca459599b2912808855, type: 3}
   - {fileID: 8300000, guid: 6cb8fc5c06f2d914bba36c4c54fa28fe, type: 3}
-  - {fileID: 8300000, guid: 96db757070df94f488225a751bf7b3f9, type: 3}
+  - {fileID: 8300000, guid: 8963efdca37b2b84e9506335510bb39c, type: 3}
   - {fileID: 8300000, guid: d939542846e5b194080fcbb0dde53f26, type: 3}
-  - {fileID: 8300000, guid: 5ec23a3c792725f46a6258c1eea5d57a, type: 3}
-  PING_DELAY: 0.2
+  - {fileID: 8300000, guid: ef4377124a133834097594c11a2e2d5c, type: 3}
+  - {fileID: 8300000, guid: 08b75dc07e1ea874ba93c1c13c14ff26, type: 3}
+  - {fileID: 8300000, guid: 3473cb2ca51d98446ae80c0e7347621c, type: 3}
+  PING_DELAY: 0.5
   SIGNAL_LOSS: 0.125
   SIGNAL_PING_THRESH: 0.01
   PING_SCALE_SAMPLE: 1
   PING_SCALE_BASE: 0.25
-  restBetweenNotes: 0.25
+  restBetweenNotes: 0.125
   valuesToWatch: []
