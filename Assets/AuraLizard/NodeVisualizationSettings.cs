@@ -4,14 +4,14 @@ using UnityEngine;
 
 public enum ClipType
 {
+    NodeCreate,
+    NodeHover,
     NodePing,
     NodeNotif,
-    EdgePing,
-    EdgeNotif,
-    NodeHover,
-    NodeCreate,
     NodeDestroy,
     EdgeCreate,
+    EdgePing,
+    EdgeNotif,
     EdgeDestroy
 }
 
